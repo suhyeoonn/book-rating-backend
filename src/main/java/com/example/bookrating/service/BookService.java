@@ -17,12 +17,24 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book createBook(BookDto book) {
+    public Book create(BookDto book) {
         // isbn이 동일한 책은 중복 등록할 수 없음
         bookRepository.findByIsbn(book.getIsbn()).ifPresent(e -> {
             throw new IllegalStateException("이미 존재하는 책입니다");
         });;
 
         return bookRepository.save(book.toEntity());
+    }
+
+    public Book update(Integer id, BookDto dto) {
+        Book target = bookRepository.findById(id).orElse(null);
+        if (target == null) {
+            throw new IllegalStateException("존재하지 않는 책입니다");
+        }
+
+        Book book = dto.toEntity();
+        target.patch(book);
+
+        return bookRepository.save(target);
     }
 }

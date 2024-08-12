@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +23,7 @@ class BookServiceTest {
     void 책_등록() {
         BookDto book = new BookDto(null, "1234", "book");
 
-        bookService.createBook(book);
+        bookService.create(book);
 
         Book result = bookRepository.findByIsbn(book.getIsbn()).get();
 
@@ -35,11 +33,23 @@ class BookServiceTest {
     @Test
     void isbn_중복_확인() {
         BookDto book1 = new BookDto(null, "1234", "book");
-        bookService.createBook(book1);
+        bookService.create(book1);
 
         BookDto book2 = new BookDto(null, "1234", "book");
-        IllegalStateException e = assertThrows(IllegalStateException.class, () -> bookService.createBook(book2));
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> bookService.create(book2));
 
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 책입니다");
+        assertEquals(e.getMessage(), "이미 존재하는 책입니다");
+    }
+
+    @Test
+    void 책_제목_수정() {
+        BookDto book1 = new BookDto(null, "1234", "book");
+        Book saveBook = bookService.create(book1);
+
+        BookDto dto = new BookDto(null, null, "update");
+        bookService.update(saveBook.getId(), dto);
+
+        Book result = bookRepository.findById(saveBook.getId()).get();
+        assertEquals(result.getTitle(), dto.getTitle());
     }
 }

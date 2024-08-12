@@ -15,4 +15,10 @@ public class Book {
     private Integer id;
     private String isbn;
     private String title;
+
+    public void patch(Book book){
+        if (book.title != null) {
+            this.title = book.title;
+        }
+    }
 }
