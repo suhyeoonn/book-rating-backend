@@ -69,7 +69,7 @@ class BookServiceTest {
         long count = bookRepository.count();
 
         int id = (int) (count + 1);
-        IllegalStateException e = assertThrows(IllegalStateException.class, () -> bookService.validate(id));
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> bookService.findBookOrThrow(id));
 
         assertEquals(e.getMessage(), "존재하지 않는 책입니다");
     }

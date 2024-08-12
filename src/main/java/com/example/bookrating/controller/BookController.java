@@ -50,7 +50,6 @@ public class BookController {
     @DeleteMapping("/books/{id}")
     public ResponseEntity<?> deleteBook(@PathVariable("id") Integer id) {
         try {
-            System.out.println(id);
             bookService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalStateException e) {
