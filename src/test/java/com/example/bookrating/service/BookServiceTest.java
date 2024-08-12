@@ -52,4 +52,25 @@ class BookServiceTest {
         Book result = bookRepository.findById(saveBook.getId()).get();
         assertEquals(result.getTitle(), dto.getTitle());
     }
+
+    @Test
+    void 책_삭제() {
+        BookDto book1 = new BookDto(null, "1234", "book");
+        Book saveBook = bookService.create(book1);
+
+        bookService.delete(saveBook.getId());
+
+        Book result = bookRepository.findById(saveBook.getId()).orElse(null);
+        assertEquals(null, result);
+    }
+
+    @Test
+    void 존재하지_않는_책_확인() {
+        long count = bookRepository.count();
+
+        int id = (int) (count + 1);
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> bookService.validate(id));
+
+        assertEquals(e.getMessage(), "존재하지 않는 책입니다");
+    }
 }

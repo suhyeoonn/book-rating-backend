@@ -27,14 +27,25 @@ public class BookService {
     }
 
     public Book update(Integer id, BookDto dto) {
-        Book target = bookRepository.findById(id).orElse(null);
-        if (target == null) {
-            throw new IllegalStateException("존재하지 않는 책입니다");
-        }
+        Book target = validate(id);
 
         Book book = dto.toEntity();
         target.patch(book);
 
         return bookRepository.save(target);
+    }
+
+    public void delete(Integer id) {
+        validate(id);
+
+        bookRepository.deleteById(id);
+    }
+
+    public Book validate(Integer id) {
+        Book target = bookRepository.findById(id).orElse(null);
+        if (target == null) {
+            throw new IllegalStateException("존재하지 않는 책입니다");
+        }
+        return target;
     }
 }

@@ -36,10 +36,23 @@ public class BookController {
     }
 
     @PatchMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable Integer id,  @RequestBody BookDto book) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Integer id,  @RequestBody BookDto book) {
         try {
             Book savedBook = bookService.update(id, book);
             return ResponseEntity.status(HttpStatus.OK).body(savedBook);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
+        }
+    }
+
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable("id") Integer id) {
+        try {
+            System.out.println(id);
+            bookService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
