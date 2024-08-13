@@ -22,9 +22,9 @@ public class BookController {
     }
 
     @PostMapping("/books")
-    public ResponseEntity<?> createBook(@RequestBody BookDto book) {
+    public ResponseEntity<?> createBook(@RequestBody BookDto dto) {
         try {
-            Book savedBook = bookService.create(book);
+            Book savedBook = bookService.create(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
         } catch (IllegalStateException e) {
             // 중복된 책일 경우 409 Conflict 상태 코드와 함께 오류 메시지 반환
@@ -36,9 +36,9 @@ public class BookController {
     }
 
     @PatchMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Integer id,  @RequestBody BookDto book) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Integer id,  @RequestBody BookDto dto) {
         try {
-            Book savedBook = bookService.update(id, book);
+            Book savedBook = bookService.update(id, dto);
             return ResponseEntity.status(HttpStatus.OK).body(savedBook);
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));

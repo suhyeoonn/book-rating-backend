@@ -17,13 +17,13 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book create(BookDto book) {
+    public Book create(BookDto dto) {
         // isbn이 동일한 책은 중복 등록할 수 없음
-        bookRepository.findByIsbn(book.getIsbn()).ifPresent(e -> {
+        bookRepository.findByIsbn(dto.getIsbn()).ifPresent(e -> {
             throw new IllegalStateException("이미 존재하는 책입니다");
         });;
 
-        return bookRepository.save(book.toEntity());
+        return bookRepository.save(dto.toEntity());
     }
 
     public Book update(Integer id, BookDto dto) {
