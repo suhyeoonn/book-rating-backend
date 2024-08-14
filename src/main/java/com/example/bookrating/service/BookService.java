@@ -2,16 +2,23 @@ package com.example.bookrating.service;
 
 import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.entity.Book;
+import com.example.bookrating.entity.Tag;
 import com.example.bookrating.repository.BookRepository;
+import com.example.bookrating.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private TagRepository tagRepository;
 
     public List<Book> getBooks() {
         return bookRepository.findAll();
@@ -23,13 +30,24 @@ public class BookService {
             throw new IllegalStateException("이미 존재하는 책입니다");
         });;
 
-        return bookRepository.save(dto.toEntity());
+
+        Set<Tag> tags = new HashSet<>();
+        for (int tagId: dto.getTagIds()) {
+            Optional<Tag> tag = tagRepository.findById(tagId);
+            if (tag.isPresent()) {
+                tags.add(tag.get());
+            }
+        }
+
+        Book book = dto.toEntity(tags);
+
+        return bookRepository.save(book);
     }
 
     public Book update(Integer id, BookDto dto) {
         Book target = findBookOrThrow(id);
 
-        Book book = dto.toEntity();
+        Book book = dto.toEntity(null);
         target.patch(book);
 
         return bookRepository.save(target);

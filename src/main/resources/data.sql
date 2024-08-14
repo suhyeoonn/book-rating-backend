@@ -5,3 +5,15 @@ INSERT INTO book (isbn, title) VALUES
 ('9781594631931', 'The Kite Runner'),
 ('9780385490818', 'The Handmaid''s Tale'),
 ('9780345339683', 'The Hobbit');
+
+INSERT INTO tag (name) VALUES
+('Classic'),
+('Dystopian'),
+('Romance'),
+('Historical'),
+('Fantasy'),
+('Literary Fiction'),
+('American'),
+('British'),
+('Young Adult'),
+('Drama');
