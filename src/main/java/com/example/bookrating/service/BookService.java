@@ -8,10 +8,7 @@ import com.example.bookrating.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -28,26 +25,35 @@ public class BookService {
         // isbn이 동일한 책은 중복 등록할 수 없음
         bookRepository.findByIsbn(dto.getIsbn()).ifPresent(e -> {
             throw new IllegalStateException("이미 존재하는 책입니다");
-        });;
+        });
 
-
-        Set<Tag> tags = new HashSet<>();
-        for (int tagId: dto.getTagIds()) {
-            Optional<Tag> tag = tagRepository.findById(tagId);
-            if (tag.isPresent()) {
-                tags.add(tag.get());
-            }
-        }
+        Set<Tag> tags = findTagsByIds(dto.getTagIds());
 
         Book book = dto.toEntity(tags);
 
         return bookRepository.save(book);
     }
 
+    private Set<Tag> findTagsByIds(int[] tagIds) {
+        Set<Tag> tags = new HashSet<>();
+        for (int tagId : tagIds) {
+            Optional<Tag> tag = tagRepository.findById(tagId);
+            if (tag.isPresent()) {
+                tags.add(tag.get());
+            }
+        }
+        return tags;
+    }
+
     public Book update(Integer id, BookDto dto) {
         Book target = findBookOrThrow(id);
 
-        Book book = dto.toEntity(null);
+        Set<Tag> tags = Optional.ofNullable(dto.getTagIds())
+                .map(this::findTagsByIds)
+                .orElse(Collections.emptySet());
+
+        Book book = dto.toEntity(tags);
+
         target.patch(book);
 
         return bookRepository.save(target);

@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,11 +58,28 @@ class BookServiceTest {
         BookDto book1 = new BookDto(null, "1234", "book", tagIds);
         Book saveBook = bookService.create(book1);
 
-        BookDto dto = new BookDto(null, null, "update", tagIds);
+        BookDto dto = new BookDto(null, null, "update", null);
         bookService.update(saveBook.getId(), dto);
 
         Book result = bookRepository.findById(saveBook.getId()).get();
         assertEquals(result.getTitle(), dto.getTitle());
+    }
+
+    @Test
+    void 책_제목_및_태그_수정() {
+        BookDto book1 = new BookDto(null, "1234", "book", new int[]{1});
+        Book saveBook = bookService.create(book1);
+
+        BookDto dto = new BookDto(null, null, "update", new int[]{2,3});
+        bookService.update(saveBook.getId(), dto);
+
+        Book result = bookRepository.findById(saveBook.getId()).get();
+        assertEquals("update", result.getTitle());
+
+        assertEquals(2, result.getTags().size());
+
+        Set<Integer> tagIds = result.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+        assertTrue(tagIds.containsAll(Arrays.asList(2,3)));
     }
 
     @Test

@@ -30,6 +30,8 @@ public class Book {
     public void patch(Book book){
         if (book.title != null) {
             this.title = book.title;
+        } if (!book.tags.isEmpty()) {
+            this.tags = book.tags;
         }
     }
 }
