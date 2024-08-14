@@ -38,7 +38,7 @@ public class BookController {
     @PatchMapping("/books/{id}")
     public ResponseEntity<?> updateBook(@PathVariable("id") Integer id,  @RequestBody BookDto dto) {
         try {
-            Book savedBook = bookService.update(id, dto);
+            BookDto savedBook = bookService.update(id, dto);
             return ResponseEntity.status(HttpStatus.OK).body(savedBook);
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));

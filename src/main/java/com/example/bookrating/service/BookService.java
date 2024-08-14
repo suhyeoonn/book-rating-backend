@@ -55,7 +55,7 @@ public class BookService {
         return tags;
     }
 
-    public Book update(Integer id, BookDto dto) {
+    public BookDto update(Integer id, BookDto dto) {
         Book target = findBookOrThrow(id);
 
         Set<Tag> tags = Optional.ofNullable(dto.getTagIds())
@@ -66,7 +66,7 @@ public class BookService {
 
         target.patch(book);
 
-        return bookRepository.save(target);
+        return toDto(bookRepository.save(target));
     }
 
     public void delete(Integer id) {
