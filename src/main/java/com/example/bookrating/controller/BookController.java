@@ -17,7 +17,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public List<Book> getBooks() {
+    public List<BookDto> getBooks() {
         return bookService.getBooks();
     }
 

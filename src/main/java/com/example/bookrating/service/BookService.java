@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -17,8 +18,15 @@ public class BookService {
     @Autowired
     private TagRepository tagRepository;
 
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public List<BookDto> getBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(book -> {
+                    int[] tags = book.getTags().stream()
+                            .mapToInt(Tag::getId)
+                            .toArray();
+                    return new BookDto(book.getId(), book.getIsbn(), book.getTitle(), tags);
+                }).collect(Collectors.toList());
     }
 
     public Book create(BookDto dto) {
