@@ -21,15 +21,17 @@ public class BookService {
     public List<BookDto> getBooks() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
-                .map(book -> {
-                    int[] tags = book.getTags().stream()
-                            .mapToInt(Tag::getId)
-                            .toArray();
-                    return new BookDto(book.getId(), book.getIsbn(), book.getTitle(), tags);
-                }).collect(Collectors.toList());
+                .map(this::toDto).collect(Collectors.toList());
     }
 
-    public Book create(BookDto dto) {
+    private BookDto toDto(Book book) {
+        int[] tagIds = book.getTags().stream()
+                .mapToInt(Tag::getId)
+                .toArray();
+        return new BookDto(book.getId(), book.getIsbn(), book.getTitle(), tagIds);
+    }
+
+    public BookDto create(BookDto dto) {
         // isbn이 동일한 책은 중복 등록할 수 없음
         bookRepository.findByIsbn(dto.getIsbn()).ifPresent(e -> {
             throw new IllegalStateException("이미 존재하는 책입니다");
@@ -37,9 +39,9 @@ public class BookService {
 
         Set<Tag> tags = findTagsByIds(dto.getTagIds());
 
-        Book book = dto.toEntity(tags);
+        Book saved = bookRepository.save(dto.toEntity(tags));
 
-        return bookRepository.save(book);
+        return toDto(saved);
     }
 
     private Set<Tag> findTagsByIds(int[] tagIds) {

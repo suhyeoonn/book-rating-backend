@@ -56,7 +56,7 @@ class BookServiceTest {
     @Test
     void 책_제목_수정() {
         BookDto book1 = new BookDto(null, "1234", "book", tagIds);
-        Book saveBook = bookService.create(book1);
+        BookDto saveBook = bookService.create(book1);
 
         BookDto dto = new BookDto(null, null, "update", null);
         bookService.update(saveBook.getId(), dto);
@@ -68,7 +68,7 @@ class BookServiceTest {
     @Test
     void 책_제목_및_태그_수정() {
         BookDto book1 = new BookDto(null, "1234", "book", new int[]{1});
-        Book saveBook = bookService.create(book1);
+        BookDto saveBook = bookService.create(book1);
 
         BookDto dto = new BookDto(null, null, "update", new int[]{2,3});
         bookService.update(saveBook.getId(), dto);
@@ -85,7 +85,7 @@ class BookServiceTest {
     @Test
     void 책_삭제() {
         BookDto book1 = new BookDto(null, "1234", "book", tagIds);
-        Book saveBook = bookService.create(book1);
+        BookDto saveBook = bookService.create(book1);
 
         bookService.delete(saveBook.getId());
 

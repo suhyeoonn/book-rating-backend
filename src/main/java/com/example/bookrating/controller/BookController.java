@@ -24,7 +24,7 @@ public class BookController {
     @PostMapping("/books")
     public ResponseEntity<?> createBook(@RequestBody BookDto dto) {
         try {
-            Book savedBook = bookService.create(dto);
+            BookDto savedBook = bookService.create(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
         } catch (IllegalStateException e) {
             // 중복된 책일 경우 409 Conflict 상태 코드와 함께 오류 메시지 반환
