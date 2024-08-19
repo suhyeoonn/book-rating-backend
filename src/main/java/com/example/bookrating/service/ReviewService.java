@@ -23,7 +23,7 @@ public class ReviewService {
                 .map(ReviewService::getReviewDto)
                 .collect(Collectors.toList());
 
-        double averageRating = reviewRepository.findAverageRatingByBookId(bookId);
+        double averageRating = reviewRepository.findAverageRatingByBookId(bookId).orElse(0.0);
         return new ReviewListResponseDto(reviewDtos, averageRating);
     }
 
