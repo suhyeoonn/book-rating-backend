@@ -62,4 +62,11 @@ public class ReviewService {
     private Review findReviewOrThrow(Long reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalStateException("존재하지 않는 리뷰입니다"));
     }
+
+    public ReviewResponseDto deleteReview(int bookId, Long reviewId) {
+        bookService.findBookOrThrow(bookId);
+        findReviewOrThrow(reviewId);
+        reviewRepository.deleteById(reviewId);
+        return new ReviewResponseDto(null, getAverageRating(bookId));
+    }
 }

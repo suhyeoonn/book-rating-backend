@@ -28,4 +28,8 @@ public class ReviewController {
         return reviewService.updateReview(bookId, reviewId, dto);
     }
 
+    @DeleteMapping("/{bookId}/reviews/{reviewId}")
+    public ReviewResponseDto deleteReview(@PathVariable("bookId") Integer bookId, @PathVariable("reviewId") Long reviewId) {
+        return reviewService.deleteReview(bookId, reviewId);
+    }
 }
