@@ -20,7 +20,7 @@ public class Review {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    private int rating;
+    private Integer rating;
 
     @Column(columnDefinition = "TEXT")
     private String reviewText;
@@ -28,7 +28,7 @@ public class Review {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    public Review(Book book, int rating, String reviewText) {
+    public Review(Book book, Integer rating, String reviewText) {
         this.book = book;
         this.rating = rating;
         this.reviewText = reviewText;
@@ -37,5 +37,14 @@ public class Review {
     @PrePersist
     protected void onCreate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void patch(Review review) {
+        if (review.reviewText != null) {
+            this.reviewText = review.reviewText;
+        }
+        if (review.rating != null) {
+            this.rating = review.rating;
+        }
     }
 }

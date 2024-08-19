@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ReviewDto {
     private Long id;
-    private int rating;
+    private Integer rating;
     private String reviewText;
     private LocalDateTime updatedAt;
 }

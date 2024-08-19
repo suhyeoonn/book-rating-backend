@@ -42,4 +42,19 @@ public class ReviewService {
         Review saved = reviewRepository.save(new Review(book, dto.getRating(), dto.getReviewText()));
         return new ReviewResponseDto(getReviewDto(saved), getAverageRating(bookId));
     }
+
+    public ReviewResponseDto updateReview(int bookId, Long reviewId, ReviewDto dto) {
+        Book book = bookService.findBookOrThrow(bookId);
+
+        Review review = findReviewOrThrow(reviewId);
+
+        review.patch(new Review(book, dto.getRating(), dto.getReviewText()));
+
+        Review saved = reviewRepository.save(review);
+        return new ReviewResponseDto(getReviewDto(saved), getAverageRating(bookId));
+    }
+
+    private Review findReviewOrThrow(Long reviewId) {
+        return reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalStateException("존재하지 않는 리뷰입니다"));
+    }
 }
