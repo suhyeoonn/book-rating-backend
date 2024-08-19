@@ -27,4 +27,15 @@ public class Review {
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
+
+    public Review(Book book, int rating, String reviewText) {
+        this.book = book;
+        this.rating = rating;
+        this.reviewText = reviewText;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
