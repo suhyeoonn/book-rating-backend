@@ -9,6 +9,8 @@ import com.example.bookrating.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,10 @@ public class ReviewService {
     }
 
     private double getAverageRating(int bookId) {
-        return reviewRepository.findAverageRatingByBookId(bookId).orElse(0.0);
+        Double averageRating = reviewRepository.findAverageRatingByBookId(bookId).orElse(0.0);
+        return BigDecimal.valueOf(averageRating)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
     private static ReviewDto getReviewDto(Review review) {
