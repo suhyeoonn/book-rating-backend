@@ -1,7 +1,7 @@
 package com.example.bookrating.controller;
 
 import com.example.bookrating.dto.BookDto;
-import com.example.bookrating.entity.Book;
+import com.example.bookrating.dto.BookListDto;
 import com.example.bookrating.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public List<BookDto> getBooks() {
+    public List<BookListDto> getBooks() {
         return bookService.getBooks();
     }
 

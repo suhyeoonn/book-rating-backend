@@ -1,6 +1,8 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.BookDto;
+import com.example.bookrating.dto.BookListDto;
+import com.example.bookrating.dto.TagDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Tag;
 import com.example.bookrating.repository.BookRepository;
@@ -18,10 +20,15 @@ public class BookService {
     @Autowired
     private TagRepository tagRepository;
 
-    public List<BookDto> getBooks() {
+    public List<BookListDto> getBooks() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
-                .map(this::toDto).collect(Collectors.toList());
+                .map(book -> {
+                    List<TagDto> tags = book.getTags().stream()
+                            .map(tag -> new TagDto(tag.getId(), tag.getName()))
+                            .toList();
+                    return new BookListDto(book.getId(), book.getIsbn(), book.getTitle(), tags);
+                }).collect(Collectors.toList());
     }
 
     private BookDto toDto(Book book) {
