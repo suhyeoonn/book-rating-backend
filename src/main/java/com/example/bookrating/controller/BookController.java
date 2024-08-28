@@ -36,7 +36,7 @@ public class BookController {
     }
 
     @PatchMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Integer id,  @RequestBody BookDto dto) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id,  @RequestBody BookDto dto) {
         try {
             BookDto savedBook = bookService.update(id, dto);
             return ResponseEntity.status(HttpStatus.OK).body(savedBook);
@@ -48,8 +48,9 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id) {
         try {
+            // TODO 책과 연관된 리뷰 먼저 지우기
             bookService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalStateException e) {

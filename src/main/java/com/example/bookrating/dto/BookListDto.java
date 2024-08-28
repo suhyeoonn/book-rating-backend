@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class BookListDto {
-    private Integer id;
+    private Long id;
     private String isbn;
     private String title;
     private List<TagDto> tags;

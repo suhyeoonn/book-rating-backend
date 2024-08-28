@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 public class BookDto {
-    private Integer id;
+    private Long id;
     private String isbn;
     private String title;
     private int[] tagIds;

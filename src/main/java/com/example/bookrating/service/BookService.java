@@ -62,7 +62,7 @@ public class BookService {
         return tags;
     }
 
-    public BookDto update(Integer id, BookDto dto) {
+    public BookDto update(Long id, BookDto dto) {
         Book target = findBookOrThrow(id);
 
         Set<Tag> tags = Optional.ofNullable(dto.getTagIds())
@@ -76,13 +76,13 @@ public class BookService {
         return toDto(bookRepository.save(target));
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         findBookOrThrow(id);
 
         bookRepository.deleteById(id);
     }
 
-    public Book findBookOrThrow(Integer id) {
+    public Book findBookOrThrow(Long id) {
         Book target = bookRepository.findById(id).orElse(null);
         if (target == null) {
             throw new IllegalStateException("존재하지 않는 책입니다");
