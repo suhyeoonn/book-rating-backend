@@ -1,0 +1,23 @@
+GET http://localhost:8080/books
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+  "isbn":"10101011",
+  "title":"book1",
+  "tagIds":[3,8]
+}
+
+
+###
+PATCH  http://localhost:8080/books/1
+Content-Type: application/json
+
+{ 
+  "title":"book-update"
+}
+
+###
+DELETE http://localhost:8080/books/1
