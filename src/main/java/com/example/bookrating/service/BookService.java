@@ -35,7 +35,7 @@ public class BookService {
         int[] tagIds = book.getTags().stream()
                 .mapToInt(Tag::getId)
                 .toArray();
-        return new BookDto(book.getId(), book.getIsbn(), book.getTitle(), tagIds);
+        return new BookDto(book.getId(), book.getIsbn(), book.getTitle(), tagIds, book.getReviews());
     }
 
     public BookDto create(BookDto dto) {
