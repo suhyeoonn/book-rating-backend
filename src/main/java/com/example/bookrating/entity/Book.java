@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.*;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Book {
 
     @Id
@@ -36,7 +38,7 @@ public class Book {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date datetime;
+    private LocalDateTime datetime;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String url;
@@ -48,7 +50,7 @@ public class Book {
     private String publisher;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserBook> userBooks;
+    private List<MemberBook> memberBooks;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;

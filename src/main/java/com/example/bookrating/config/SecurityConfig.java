@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/books/**", "/auth/register", "/auth/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/books/**", "/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()  // 나머지 모든 요청은 인증 필요
                 )
                 .httpBasic(basic -> basic.disable())

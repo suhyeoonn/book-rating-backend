@@ -1,26 +1,34 @@
 package com.example.bookrating.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Builder
-public class BookDto {
-    private Long id;
+@Setter
+public class CreateMemberBookDto {
+
+    @NotBlank
     private String isbn;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String thumbnail;
+
+    @NotBlank
     private String contents;
+
+    @PastOrPresent
     private LocalDateTime datetime;
+
+    @NotBlank
     private String authors;
+
+    @NotBlank
     private String publisher;
-    private Integer averageRating;
-    private Integer reviewCount;
 }
