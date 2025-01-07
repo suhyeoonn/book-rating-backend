@@ -5,39 +5,54 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String isbn;
+
+    @Column(nullable = false)
     private String title;
 
-    @ManyToMany
-    @JoinTable(
-            name = "book_tag",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<Tag> tags = new HashSet<>();
+    @Column(nullable = false)
+    private String thumbnail;
 
-    // 양방향 관계 설정
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<>();
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String contents;
 
-    public void patch(Book book){
-        if (book.title != null) {
-            this.title = book.title;
-        } if (!book.tags.isEmpty()) {
-            this.tags = book.tags;
-        }
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date datetime;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String url;
+
+    @Column(nullable = false)
+    private String authors;
+
+    @Column(nullable = false)
+    private String publisher;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBook> userBooks;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    public Book(Long id, String isbn, String title, String thumbnail, String contents, Date datetime, String authors, String publisher) {
     }
 }

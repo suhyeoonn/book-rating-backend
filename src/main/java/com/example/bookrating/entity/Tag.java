@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class Tag {
@@ -18,8 +17,8 @@ public class Tag {
     private Integer id;
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<Book> books = new HashSet<>();
+//    @ManyToMany(mappedBy = "tags")
+//    private Set<Book> books = new HashSet<>();
 
     public Tag(Integer id, String name) {
         this.id = id;

@@ -17,47 +17,20 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public List<BookListDto> getBooks() {
-        return bookService.getBooks();
+    public List<BookListDto> getBooks(@RequestParam(name = "title", required = false) String title) {
+        // title이 제공되지 않으면 전체 목록 반환
+        if (title == null || title.isBlank()) {
+            return bookService.getBooks();
+        }
+
+        // title이 제공된 경우 검색 수행
+        return bookService.getBooksByTitle(title);
     }
 
-    @PostMapping("/books")
-    public ResponseEntity<?> createBook(@RequestBody BookDto dto) {
-        try {
-            BookDto savedBook = bookService.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
-        } catch (IllegalStateException e) {
-            // 중복된 책일 경우 409 Conflict 상태 코드와 함께 오류 메시지 반환
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            // 기타 예외 처리
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
-        }
+    @GetMapping("/books/{id}")
+    public BookListDto getBook(@PathVariable("id") Long bookId) {
+        return bookService.getBookById(bookId);
     }
 
-    @PatchMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Long id,  @RequestBody BookDto dto) {
-        try {
-            BookDto savedBook = bookService.update(id, dto);
-            return ResponseEntity.status(HttpStatus.OK).body(savedBook);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
-        }
-    }
-
-    @DeleteMapping("/books/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id) {
-        try {
-            // TODO 책과 연관된 리뷰 먼저 지우기
-            bookService.delete(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
-        }
-    }
 
 }

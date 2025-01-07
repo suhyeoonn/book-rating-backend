@@ -20,6 +20,10 @@ public class Review {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     private Integer rating;
 
     @Column(columnDefinition = "TEXT")

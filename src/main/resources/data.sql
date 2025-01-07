@@ -1,12 +1,4 @@
-INSERT INTO book (isbn, title) VALUES
-('9780060935467', 'To Kill a Mockingbird'),
-('9780451524935', '1984'),
-('9780141439518', 'Pride and Prejudice'),
-('9781594631931', 'The Kite Runner'),
-('9780385490818', 'The Handmaid''s Tale'),
-('9780345339683', 'The Hobbit');
-
-INSERT INTO tag (name) VALUES
+insert into tag (name) values
 ('Classic'),
 ('Dystopian'),
 ('Romance'),
@@ -18,22 +10,7 @@ INSERT INTO tag (name) VALUES
 ('Young Adult'),
 ('Drama');
 
-INSERT INTO book_tag (book_id, tag_id) VALUES
-(1, 1),  -- 'To Kill a Mockingbird'에 'Classic' 태그를 연결
-(1, 7),  -- 'To Kill a Mockingbird'에 'American' 태그를 연결
-(2, 2),  -- '1984'에 'Dystopian' 태그를 연결
-(2, 7),  -- '1984'에 'American' 태그를 연결
-(2, 8),  -- '1984'에 'British' 태그를 연결
-(3, 3),  -- 'Pride and Prejudice'에 'Romance' 태그를 연결
-(3, 8),  -- 'Pride and Prejudice'에 'British' 태그를 연결
-(4, 4),  -- 'The Kite Runner'에 'Historical' 태그를 연결
-(5, 5),  -- 'The Handmaid''s Tale'에 'Fantasy' 태그를 연결
-(6, 5),  -- 'The Hobbit'에 'Fantasy' 태그를 연결
-(6, 9);  -- 'The Hobbit'에 'Young Adult' 태그를 연결
 
-INSERT INTO review (book_id, rating, review_text) VALUES
-(1, 5, 'Amazing book! A must-read for everyone.'),
-(1, 4, 'Really enjoyed the depth of the characters and the storyline.'),
-(1, 3, 'It was good, but the pacing was a bit slow for my taste.'),
-(2, 2, 'Not what I expected. The plot was predictable.'),
-(2, 1, 'Did not enjoy the book. Found it quite boring.');
+insert into book (id, isbn, title, thumbnail, contents, datetime, authors, publisher, url) VALUES
+(10,'9791191905236','개발자 원칙','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6233152%3Ftimestamp%3D20240530180629','“나도 테크 리더가 될 수 있을까? 어떻게 선배 개발자들처럼 성장할 수 있을까? 3년 10년 후에도 개발자로 살아갈 수 있을까? 팀워크는 도대체 어떻게 맞춰야 하는 걸까?” 개발자로 살아가면서 하루에도 천 번을 되묻는 물음에 컬리, 레몬트리, 카카오, 코드스쿼드, 무신사, 몰로코, 데이블, 인프런, 패스트캠퍼스 테크 리더 9명이 답합니다. 지금까지 만나 볼 수 없었던 생존과 성장의 원칙에서 자신만의 해답을 찾아보세요.','2022-12-19 15:00:00','박성철, 강대명, 공용준, 김정, 박미정, 박종천','골든래빗(주)','https://search.daum.net/search?w=bookpage&bookId=6233152&q=%EA%B0%9C%EB%B0%9C%EC%9E%90+%EC%9B%90%EC%B9%99'),
+(11,'9791191905458','요즘 우아한 개발','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6441263%3Ftimestamp%3D20241009160131','우아한형제들(우형)의 배달의민족은 2010년 서비스를 시작해 이젠 푸드테크를 선도하는 플랫폼이 되었습니다. 우형은 ‘우아한 기술블로그’를 통해 꾸준히 기술 노하우를 공유해왔습니다. 이 책은 블로그의 글을 엄선해 우형이 성장하며 겪고 헤쳐간 온보딩, 개발, 문화, 이슈 관리 이야기를 담았습니다. 쉽게 읽을 수 있도록 코드를 최대한 제거하고, 개발자 저자 각자의 개성을 담은 문체는 살렸습니다. 요즘 IT 회사가 어떻게 일하는지 궁금한 개발자와 기획자에게','2023-10-12 15:00:00','우아한형제들','골든래빗(주)','https://search.daum.net/search?w=bookpage&bookId=6441263&q=%EC%9A%94%EC%A6%98+%EC%9A%B0%EC%95%84%ED%95%9C+%EA%B0%9C%EB%B0%9C'),(12,'9788936513191','스크루테이프의 편지','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4819561%3Ftimestamp%3D20241101132710','《스크루테이프의 편지》는 경험 많고 노회한 고참 악마 스크루테이프가 자신의 조카이자 풋내기 악마인 웜우드에게 인간을 유혹하는 방법에 대해 충고하는 서른한 통의 편지이다. 사소한 일들로 유발되는 가족 간의 갈등, 기도에 관한 오해, 영적 침체, 영적 요소와 동물적 요소를 공유하는 인간의 이중성, 변화와 영속성의 관계, 남녀 차이, 사랑, 웃음, 쾌락, 욕망 등 삶의 본질을 이루는 다양한 영역을 아우른다.','2018-11-15 00:00:00','C. S. 루이스','홍성사','https://search.daum.net/search?w=bookpage&bookId=4819561&q=%EC%8A%A4%ED%81%AC%EB%A3%A8%ED%85%8C%EC%9D%B4%ED%94%84%EC%9D%98+%ED%8E%B8%EC%A7%80'),(13,'9791162241493','맛있는 디자인 프리미어 프로 & 애프터 이펙트 CC(2019)','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4865231%3Ftimestamp%3D20230524140445','프로와 애프터 이펙트를 한 번에 쉽게 배울 수 있습니다. 영상, 모션 그래픽 제작 및 편집 필수 기능만 골라 담아 부담 없이 학습할 수 있으며, 두 프로그램을 따로따로 배우는 것보다 효과적으로 익힐 수 있습니다. 가장 최신 버전인 CC 2019에 완벽히 대응하여 기초 이론은 물론, 필수 기능 및 CC 2019 버전의 신기능까지 빠르게 배울 수 있습니다. 전문가가 아니어도 누구나 쉽게 영상 편집에 도전할 수 있도록 가볍게 학습할 수 있는 기초 용어와 최신 트렌드','2019-01-30 15:00:00','김덕영, 심수진, 윤성우, 이수정','한빛미디어','https://search.daum.net/search?w=bookpage&bookId=4865231&q=%EB%A7%9B%EC%9E%88%EB%8A%94+%EB%94%94%EC%9E%90%EC%9D%B8+%ED%94%84%EB%A6%AC%EB%AF%B8%EC%96%B4+%ED%94%84%EB%A1%9C+%26+%EC%95%A0%ED%94%84%ED%84%B0+%EC%9D%B4%ED%8E%99%ED%8A%B8+CC%282019%29'),(14,'9791191043297','오늘 밤, 세계에서 이 사랑이 사라진다 해도','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5750248%3Ftimestamp%3D20240914171132','밤에 자고 일어나면 기억이 리셋되는 ‘선행성 기억상실증’을 앓는 소녀 히노 마오리와 무미건조한 인생을 살고 있는 평범한 고등학생 가미야 도루의 풋풋하고 애틋한 사랑 이야기『오늘 밤, 세계에서 이 사랑이 사라진다 해도』. 선행성 기억상실증이라는 익숙한 소재를 매우 수준 높은 청춘 소설로 탄생시켰다는 극찬을 받으며 제26회 전격소설대상 ‘미디어워크스문고상’을 수상한 이 작품은 간질간질한 청춘의 로맨스를 전혀 예측할 수 없는 국면으로 끌고 가, 깐깐하고','2021-06-27 15:00:00','이치조 미사키','모모','https://search.daum.net/search?w=bookpage&bookId=5750248&q=%EC%98%A4%EB%8A%98+%EB%B0%A4%2C+%EC%84%B8%EA%B3%84%EC%97%90%EC%84%9C+%EC%9D%B4+%EC%82%AC%EB%9E%91%EC%9D%B4+%EC%82%AC%EB%9D%BC%EC%A7%84%EB%8B%A4+%ED%95%B4%EB%8F%84'),(15,'9791191600650','프로그래머의 뇌','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5934425%3Ftimestamp%3D20241002153609','이 책은 인지과학에 기반을 둔 각종 방법론으로 개발자가 새로운 언어나 프레임워크를 빠르게 배워 생산성을 향상하도록 돕는다. 코드를 더 잘 이해하는 것에서 나아가, 버그 방지, 명확한 작명법, 리팩터링, 대규모 코드베이스 개선에 이르기까지 과학적으로 입증된 기법을 제시한다.','2022-01-12 00:00:00','펠리너 헤르만스','제이펍','https://search.daum.net/search?w=bookpage&bookId=5934425&q=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%9D%98+%EB%87%8C'),(16,'9791158391744','개발자의 글쓰기','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5082951%3Ftimestamp%3D20240905134429','이 책은 개발자의 글쓰기 능력을 종합적으로 향상하기 위한 책이다. 코드 안에서는 함수와 변수 이름을 짓는 것부터 주석 쓰는 법, 에러 메시지 쓰는 법까지 알려준다. 코드 밖에서는 릴리스 노트, 장애 보고서, 개발 가이드를 어떻게 하면 잘 쓸 수 있는지를 알려준다. 외주 개발을 하는 개발자를 위해 SI 제안서의 기술 부문을 설득력 있게 쓰는 법도 놓치지 않았다. 블로그를 운영하려는 개발자나 IT기업을 위해 기술 블로그를 쓰는 법과 운영하는 팁도 담았다','2019-10-04 00:00:00','김철수','위키북스','https://search.daum.net/search?w=bookpage&bookId=5082951&q=%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98+%EA%B8%80%EC%93%B0%EA%B8%B0'),(17,'9791140705078','코딩 자율학습 스프링 부트 3 자바 백엔드 개발 입문','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6381817%3Ftimestamp%3D20241213154424','스프링 부트를 처음 접하는 입문자와 이미 공부했지만 부족하다고 느끼는 분들을 위한 책입니다. 게시판을 만들며 클라이언트와 서버가 데이터를 주고받을 때 적용되는 핵심 개념 3가지, MVC 패턴, JPA, REST API를 배우고 그 과정에서 자바 백엔드 개발의 전반을 이해할 수 있습니다. 책을 마치고 나면 자신만의 프로젝트를 만들 수 있고, 스프링 심화 학습을 따라갈 수 있는 수준이 됩니다. 단계별로 진행되는 실습을 따라 하다 보면 자연스럽게 필수 개념과','2023-07-10 00:00:00','박세홍(홍팍)','길벗','https://search.daum.net/search?w=bookpage&bookId=6381817&q=%EC%BD%94%EB%94%A9+%EC%9E%90%EC%9C%A8%ED%95%99%EC%8A%B5+%EC%8A%A4%ED%94%84%EB%A7%81+%EB%B6%80%ED%8A%B8+3+%EC%9E%90%EB%B0%94+%EB%B0%B1%EC%97%94%EB%93%9C+%EA%B0%9C%EB%B0%9C+%EC%9E%85%EB%AC%B8'),(18,'9791192999463','교양 있는 어른을 위한 최소한의 철학 수업','https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6772818%3Ftimestamp%3D20241114161903','합류하고자 하는 당신이 있다. 철학에 관심은 있지만, 어디서부터 시작해야 할지 갈피가 잡히지 않을 것이다. 유명한 철학책을 펼쳤다가 외계어 같은 용어에 소스라치게 놀라 잠시 철학을 멀리했을지도 모른다.《교양 있는 어른들을 위한 최소한의 철학 수업》은 그런 당신의 고민을 해결해 줄 친절한 철학 입문서다. 이 책은 일상에서 종종 접하지만 정확한 의미는 몰랐던 철학 용어를 단 한 권에 정리했다. 이제 막 철학의 길에 들어선 당신이 모든 내용을 잘 소화할 수 있도록 각','2024-11-12 00:00:00','오가와 히토시','빌리버튼','https://search.daum.net/search?w=bookpage&bookId=6772818&q=%EA%B5%90%EC%96%91+%EC%9E%88%EB%8A%94+%EC%96%B4%EB%A5%B8%EC%9D%84+%EC%9C%84%ED%95%9C+%EC%B5%9C%EC%86%8C%ED%95%9C%EC%9D%98+%EC%B2%A0%ED%95%99+%EC%88%98%EC%97%85');
