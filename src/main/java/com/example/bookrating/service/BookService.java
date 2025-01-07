@@ -1,16 +1,11 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.BookDto;
-import com.example.bookrating.dto.BookListDto;
-import com.example.bookrating.dto.TagDto;
 import com.example.bookrating.entity.Book;
-import com.example.bookrating.entity.Tag;
 import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,10 +17,10 @@ public class BookService {
     @Autowired
     private TagRepository tagRepository;
 
-    public List<BookListDto> getBooks() {
+    public List<BookDto> getBooks() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
-                .map(book -> BookListDto.builder()
+                .map(book -> BookDto.builder()
                         .id(book.getId())
                         .isbn(book.getIsbn())
                         .title(book.getTitle())
@@ -38,11 +33,11 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public BookListDto getBookById(Long id) {
+    public BookDto getBookById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
 
-        return BookListDto.builder()
+        return BookDto.builder()
                 .id(book.getId())
                 .isbn(book.getIsbn())
                 .title(book.getTitle())
@@ -54,11 +49,11 @@ public class BookService {
                 .build();
     }
 
-    public List<BookListDto> getBooksByTitle(String title) {
+    public List<BookDto> getBooksByTitle(String title) {
         List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
         return books.stream()
-                .map(book -> BookListDto.builder()
+                .map(book -> BookDto.builder()
                         .id(book.getId())
                         .isbn(book.getIsbn())
                         .title(book.getTitle())

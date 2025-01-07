@@ -1,6 +1,5 @@
 package com.example.bookrating.service;
 
-import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Tag;
 import com.example.bookrating.repository.BookRepository;
