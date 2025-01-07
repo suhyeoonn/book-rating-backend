@@ -4,6 +4,7 @@ import com.example.bookrating.dto.MemberDto;
 import com.example.bookrating.entity.Member;
 import com.example.bookrating.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,13 +13,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     /**
      * 회원가입 로직
      */
     public void registerUser(MemberDto memberDto) {
+        String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
+
         Member member = Member.builder()
                 .username(memberDto.getUsername())
-                .password(memberDto.getPassword())  // 실제로는 암호화를 적용해야 함 (예: BCrypt)
+                .password(encryptedPassword)
                 .build();
 
         memberRepository.save(member);
@@ -26,6 +31,6 @@ public class AuthService {
 
     public boolean validateLogin(String username, String password) {
         Optional<Member> member = memberRepository.findByUsername(username);
-        return member.isPresent() && password.equals(member.get().getPassword());
+        return member.isPresent() && passwordEncoder.matches(password, member.get().getPassword());
     }
 }
