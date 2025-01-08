@@ -66,4 +66,13 @@ public class MemberBookController {
         memberBookService.updateMemo(id, requestDto.getMemo());
         return ResponseEntity.ok("Memo updated successfully!");
     }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> updateMemo(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateStatusRequestDto requestDto) {
+
+        memberBookService.updateStatus(id, requestDto.getStatus());
+        return ResponseEntity.ok("Status updated successfully!");
+    }
 }
