@@ -1,10 +1,14 @@
 package com.example.bookrating.service;
 
+import com.example.bookrating.dto.CreateReviewDto;
 import com.example.bookrating.dto.ReviewDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.dto.ReviewResponseDto;
 import com.example.bookrating.entity.Book;
+import com.example.bookrating.entity.Member;
 import com.example.bookrating.entity.Review;
+import com.example.bookrating.repository.BookRepository;
+import com.example.bookrating.repository.MemberRepository;
 import com.example.bookrating.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +23,27 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private BookService bookService;
+    private BookRepository bookRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
+
+    public void createReview(CreateReviewDto requestDto, Long memberId) {
+        Book book = bookRepository.findById(requestDto.getBookId())
+                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다."));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+        Review review = new Review(
+                book,
+                requestDto.getRating(),
+                requestDto.getComment(),
+                member
+        );
+
+        reviewRepository.save(review);
+    }
 //    public ReviewListResponseDto getReviews(Long bookId) {
 //        bookService.findBookOrThrow(bookId);
 //        List<ReviewDto> reviewDtos = reviewRepository.findReviewByBookId(bookId).stream()
@@ -42,11 +65,7 @@ public class ReviewService {
 //        return new ReviewDto(review.getId(), review.getRating(), review.getReviewText(), review.getUpdatedAt());
 //    }
 //
-//    public ReviewResponseDto addReview(Long bookId, ReviewDto dto) {
-//        Book book = bookService.findBookOrThrow(bookId);
-//        Review saved = reviewRepository.save(new Review(book, dto.getRating(), dto.getReviewText()));
-//        return new ReviewResponseDto(getReviewDto(saved), getAverageRating(bookId));
-//    }
+
 //
 //    public ReviewResponseDto updateReview(Long bookId, Long reviewId, ReviewDto dto) {
 //        Book book = bookService.findBookOrThrow(bookId);

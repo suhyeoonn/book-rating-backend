@@ -1,14 +1,19 @@
 package com.example.bookrating.controller;
 
+import com.example.bookrating.dto.CreateReviewDto;
 import com.example.bookrating.dto.ReviewDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.dto.ReviewResponseDto;
 import com.example.bookrating.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/reviews")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
@@ -18,10 +23,12 @@ public class ReviewController {
 //        return reviewService.getReviews(bookId);
 //    }
 //
-//    @PostMapping("/{bookId}/reviews")
-//    public ReviewResponseDto addReview(@PathVariable("bookId") Long bookId, @RequestBody ReviewDto dto) {
-//        return reviewService.addReview(bookId, dto);
-//    }
+    @PostMapping
+    public ResponseEntity<Void> addReview(@RequestBody CreateReviewDto dto,  @AuthenticationPrincipal UserDetails userDetails) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+         reviewService.createReview(dto, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 //
 //    @PatchMapping("/{bookId}/reviews/{reviewId}")
 //    public ReviewResponseDto updateReview(@PathVariable("bookId") Long bookId, @PathVariable("reviewId") Long reviewId, @RequestBody ReviewDto dto) {

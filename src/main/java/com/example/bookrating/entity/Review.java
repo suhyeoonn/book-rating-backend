@@ -27,15 +27,16 @@ public class Review {
     private Integer rating;
 
     @Column(columnDefinition = "TEXT")
-    private String reviewText;
+    private String comment;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    public Review(Book book, Integer rating, String reviewText) {
+    public Review(Book book, Integer rating, String reviewText, Member member) {
         this.book = book;
         this.rating = rating;
-        this.reviewText = reviewText;
+        this.comment = reviewText;
+        this.member = member;
     }
 
     @PrePersist
@@ -44,8 +45,8 @@ public class Review {
     }
 
     public void patch(Review review) {
-        if (review.reviewText != null) {
-            this.reviewText = review.reviewText;
+        if (review.comment != null) {
+            this.comment = review.comment;
         }
         if (review.rating != null) {
             this.rating = review.rating;

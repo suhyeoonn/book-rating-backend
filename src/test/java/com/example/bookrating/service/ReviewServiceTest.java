@@ -54,14 +54,14 @@ class ReviewServiceTest {
         );
 
         Review review = reviewRepository.findById(result.getReview().getId()).get();
-        assertEquals("bad", review.getReviewText());
+        assertEquals("bad", review.getComment());
 
         ReviewResponseDto updateReview = reviewService.updateReview(savedBook.getId(), result.getReview().getId(),
                 new ReviewDto(null, 3, "not bad", null)
         );
 
         Review review2 = reviewRepository.findById(result.getReview().getId()).get();
-        assertEquals("not bad", review2.getReviewText());
+        assertEquals("not bad", review2.getComment());
         assertEquals(3, review2.getRating());
         assertEquals(3, updateReview.getAverageRating());
     }
