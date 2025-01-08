@@ -2,6 +2,7 @@ package com.example.bookrating.service;
 
 import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.dto.CreateMemberBookDto;
+import com.example.bookrating.dto.GetMyBookDto;
 import com.example.bookrating.dto.GetMyBooksDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Member;
@@ -75,6 +76,38 @@ public class MemberBookService {
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
         return memberBookRepository.existsByMemberIdAndBookId(memberId, book.getId());
+    }
+
+    public GetMyBookDto find(Long myBookId) {
+        MemberBook memberBook = memberBookRepository.findById(myBookId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+
+        GetMyBookDto.BookDto bookDto = new GetMyBookDto.BookDto(
+                memberBook.getBook().getId(),
+                memberBook.getBook().getIsbn(),
+                memberBook.getBook().getTitle(),
+                memberBook.getBook().getThumbnail(),
+                memberBook.getBook().getContents(),
+                memberBook.getBook().getDatetime(),
+                memberBook.getBook().getAuthors(),
+                memberBook.getBook().getPublisher()
+        );
+
+        GetMyBookDto.ReviewDto reviewDto = memberBook.getReview() != null ?
+                new GetMyBookDto.ReviewDto(
+                        memberBook.getReview().getId(),
+                        memberBook.getReview().getRating()
+                ) : null;
+
+        return new GetMyBookDto(
+                memberBook.getId(),
+                memberBook.getStatus(),
+                memberBook.getCreatedAt(),
+                memberBook.getUpdatedAt(),
+                memberBook.getFinishedAt(),
+                memberBook.getMemo(),
+                bookDto,
+                reviewDto
+        );
     }
 
     private Book saveNewBook(CreateMemberBookDto dto) {

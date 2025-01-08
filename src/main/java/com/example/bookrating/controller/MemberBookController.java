@@ -2,7 +2,9 @@ package com.example.bookrating.controller;
 
 import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.dto.CreateMemberBookDto;
+import com.example.bookrating.dto.GetMyBookDto;
 import com.example.bookrating.dto.GetMyBooksDto;
+import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.service.MemberBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,11 @@ public class MemberBookController {
     public List<GetMyBooksDto> getMyBooks(@AuthenticationPrincipal UserDetails userDetails) {
         Long memberId = Long.parseLong(userDetails.getUsername());
         return memberBookService.findAll(memberId);
+    }
+
+    @GetMapping("/{id}")
+    public GetMyBookDto getMyBook(@PathVariable("id") Long myBookId) {
+        return memberBookService.find(myBookId);
     }
 
     /**
