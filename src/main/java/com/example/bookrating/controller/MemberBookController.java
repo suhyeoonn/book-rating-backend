@@ -1,5 +1,6 @@
 package com.example.bookrating.controller;
 
+import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.dto.CreateMemberBookDto;
 import com.example.bookrating.dto.GetMyBooksDto;
 import com.example.bookrating.service.MemberBookService;
@@ -11,7 +12,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/my-books")
@@ -25,6 +28,7 @@ public class MemberBookController {
         Long memberId = Long.parseLong(userDetails.getUsername());
         return memberBookService.findAll(memberId);
     }
+
     /**
      * 책 등록 API
      */
@@ -36,5 +40,17 @@ public class MemberBookController {
         Long memberId = Long.parseLong(userDetails.getUsername());
         memberBookService.create(createMemberBookDto, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Map<String, Boolean>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
+                                                         @AuthenticationPrincipal UserDetails userDetails) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        boolean exists = memberBookService.exists(isbn, memberId);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+
+        return ResponseEntity.ok(response);
     }
 }

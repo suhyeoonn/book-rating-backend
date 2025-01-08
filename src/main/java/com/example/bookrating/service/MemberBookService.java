@@ -71,6 +71,12 @@ public class MemberBookService {
                 .collect(Collectors.toList());
     }
 
+    public boolean exists(String isbn, Long memberId) {
+        Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+
+        return memberBookRepository.existsByMemberIdAndBookId(memberId, book.getId());
+    }
+
     private Book saveNewBook(CreateMemberBookDto dto) {
         Book book = Book.builder()
                 .isbn(dto.getIsbn())
