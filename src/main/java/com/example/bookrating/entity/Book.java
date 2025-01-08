@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import lombok.*;
@@ -38,7 +38,7 @@ public class Book {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private LocalDateTime datetime;
+    private OffsetDateTime datetime;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String url;

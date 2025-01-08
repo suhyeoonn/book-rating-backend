@@ -5,7 +5,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class CreateMemberBookDto {
     private String contents;
 
     @PastOrPresent
-    private LocalDateTime datetime;
+    private OffsetDateTime datetime;
 
     @NotBlank
     private String authors;

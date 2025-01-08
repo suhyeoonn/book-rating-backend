@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class BookDto {
     private String title;
     private String thumbnail;
     private String contents;
-    private LocalDateTime datetime;
+    private OffsetDateTime datetime;
     private String authors;
     private String publisher;
     private Integer averageRating;

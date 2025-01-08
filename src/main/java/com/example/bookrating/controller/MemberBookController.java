@@ -34,6 +34,7 @@ public class MemberBookController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         Long memberId = Long.parseLong(userDetails.getUsername());
-        return ResponseEntity.ok(memberBookService.create(createMemberBookDto, memberId));
+        memberBookService.create(createMemberBookDto, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

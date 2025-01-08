@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return memberRepository.findByUsername(username)
                 .map(member -> {
                     List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-                    return new User(member.getUsername(), member.getPassword(), authorities);
+                    return new User(member.getId().toString(), member.getPassword(), authorities);
                 })
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
