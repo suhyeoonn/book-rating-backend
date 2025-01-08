@@ -1,6 +1,7 @@
 package com.example.bookrating.controller;
 
 
+import com.example.bookrating.dto.LoginResponseDto;
 import com.example.bookrating.dto.MemberDto;
 import com.example.bookrating.service.AuthService;
 import com.example.bookrating.service.CustomUserDetailsService;
@@ -43,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MemberDto memberDto, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody MemberDto memberDto, HttpSession session) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPassword())
@@ -56,7 +57,10 @@ public class AuthController {
             // 세션에 SecurityContext 저장
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
-            return ResponseEntity.ok("Login successful!");
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            LoginResponseDto loginResponseDto = new LoginResponseDto(new LoginResponseDto.User(Long.parseLong(userDetails.getUsername()), memberDto.getUsername()));
+
+            return ResponseEntity.ok(loginResponseDto);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
