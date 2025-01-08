@@ -75,4 +75,10 @@ public class MemberBookController {
         memberBookService.updateStatus(id, requestDto.getStatus());
         return ResponseEntity.ok("Status updated successfully!");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMemberBook(@PathVariable("id") Long id) {
+        memberBookService.deleteMemberBook(id);
+        return ResponseEntity.ok("MemberBook deleted successfully!");
+    }
 }
