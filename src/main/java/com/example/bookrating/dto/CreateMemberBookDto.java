@@ -31,4 +31,7 @@ public class CreateMemberBookDto {
 
     @NotBlank
     private String publisher;
+
+    @NotBlank
+    private String url;
 }

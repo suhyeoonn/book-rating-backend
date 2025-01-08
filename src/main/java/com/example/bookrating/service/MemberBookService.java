@@ -145,6 +145,7 @@ public class MemberBookService {
                 .datetime(dto.getDatetime())
                 .authors(dto.getAuthors())
                 .publisher(dto.getPublisher())
+                .url(dto.getUrl())
                 .build();
         return bookRepository.save(book);
     }
