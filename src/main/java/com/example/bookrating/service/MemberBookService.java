@@ -110,6 +110,15 @@ public class MemberBookService {
         );
     }
 
+    @Transactional
+    public MemberBook updateMemo(Long memberBookId, String memo) {
+        MemberBook memberBook = memberBookRepository.findById(memberBookId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+
+        memberBook.setMemo(memo);
+        return memberBookRepository.save(memberBook);
+    }
+
     private Book saveNewBook(CreateMemberBookDto dto) {
         Book book = Book.builder()
                 .isbn(dto.getIsbn())

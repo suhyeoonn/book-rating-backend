@@ -1,9 +1,6 @@
 package com.example.bookrating.controller;
 
-import com.example.bookrating.dto.BookDto;
-import com.example.bookrating.dto.CreateMemberBookDto;
-import com.example.bookrating.dto.GetMyBookDto;
-import com.example.bookrating.dto.GetMyBooksDto;
+import com.example.bookrating.dto.*;
 import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.service.MemberBookService;
 import jakarta.validation.Valid;
@@ -59,5 +56,14 @@ public class MemberBookController {
         response.put("exists", exists);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/memo")
+    public ResponseEntity<String> updateMemo(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateMemoRequestDto requestDto) {
+
+        memberBookService.updateMemo(id, requestDto.getMemo());
+        return ResponseEntity.ok("Memo updated successfully!");
     }
 }
