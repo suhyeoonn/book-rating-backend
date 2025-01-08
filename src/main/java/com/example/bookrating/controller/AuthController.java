@@ -35,7 +35,7 @@ public class AuthController {
 
 
     /**
-     * 계정 생성 (회원가입)
+     * 회원가입
      */
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody MemberDto registerDto) {
@@ -64,5 +64,11 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok().build();
     }
 }
