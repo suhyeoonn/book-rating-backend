@@ -22,4 +22,9 @@ public class BookDto {
     private String publisher;
     private Integer averageRating;
     private Integer reviewCount;
+
+    public BookDto(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 }
