@@ -3,9 +3,20 @@ package com.example.bookrating.controller;
 
 import com.example.bookrating.dto.MemberDto;
 import com.example.bookrating.service.AuthService;
+import com.example.bookrating.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final CustomUserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
+
 
     /**
      * 계정 생성 (회원가입)
@@ -29,13 +44,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberDto memberDto, HttpSession session) {
-        boolean isAuthenticated = authService.validateLogin(memberDto.getUsername(), memberDto.getPassword());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPassword())
+            );
 
-        if (isAuthenticated) {
-            session.setAttribute("username", memberDto.getUsername());
+            // 인증 정보를 SecurityContext에 저장
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
+
+            // 세션에 SecurityContext 저장
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
             return ResponseEntity.ok("Login successful!");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid username or password.");
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
 }
