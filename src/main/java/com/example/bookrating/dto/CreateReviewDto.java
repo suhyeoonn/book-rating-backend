@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateReviewDto {
-    private Long bookId;
     private String comment;
     private int rating;
 }

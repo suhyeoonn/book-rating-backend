@@ -29,7 +29,7 @@ public class MemberBook {
     private Book book;
 
     // 하나의 UserBook은 하나의 Review와 연결
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Review review;
 

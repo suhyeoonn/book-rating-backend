@@ -23,12 +23,7 @@ public class ReviewController {
 //        return reviewService.getReviews(bookId);
 //    }
 //
-    @PostMapping
-    public ResponseEntity<Void> addReview(@RequestBody CreateReviewDto dto,  @AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
-         reviewService.createReview(dto, memberId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+
 //
 //    @PatchMapping("/{bookId}/reviews/{reviewId}")
 //    public ReviewResponseDto updateReview(@PathVariable("bookId") Long bookId, @PathVariable("reviewId") Long reviewId, @RequestBody ReviewDto dto) {

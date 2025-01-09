@@ -1,15 +1,14 @@
 package com.example.bookrating.service;
 
-import com.example.bookrating.dto.BookDto;
-import com.example.bookrating.dto.CreateMemberBookDto;
-import com.example.bookrating.dto.GetMyBookDto;
-import com.example.bookrating.dto.GetMyBooksDto;
+import com.example.bookrating.dto.*;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Member;
 import com.example.bookrating.entity.MemberBook;
+import com.example.bookrating.entity.Review;
 import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.MemberBookRepository;
 import com.example.bookrating.repository.MemberRepository;
+import com.example.bookrating.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,7 @@ public class MemberBookService {
     private final MemberBookRepository memberBookRepository;
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public MemberBook create(CreateMemberBookDto createMemberBookDto, Long memberId) {
@@ -134,6 +134,26 @@ public class MemberBookService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
         memberBookRepository.delete(memberBook);
+    }
+
+    public ReviewDto findReview(Long id) {
+        MemberBook memberBook = memberBookRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+
+        Review review = memberBook.getReview();
+
+        // 리뷰가 없을 경우 null 반환
+        if (review == null) {
+            return null;
+        }
+
+        // 리뷰가 존재하는 경우 DTO로 변환 후 반환
+        return new ReviewDto(
+                review.getId(),
+                review.getRating(),
+                review.getComment(),
+                review.getUpdatedAt()
+        );
     }
 
     private Book saveNewBook(CreateMemberBookDto dto) {

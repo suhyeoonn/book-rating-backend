@@ -1,22 +1,21 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.CreateReviewDto;
-import com.example.bookrating.dto.ReviewDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.dto.ReviewResponseDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Member;
+import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.entity.Review;
 import com.example.bookrating.repository.BookRepository;
+import com.example.bookrating.repository.MemberBookRepository;
 import com.example.bookrating.repository.MemberRepository;
 import com.example.bookrating.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ReviewService {
@@ -26,23 +25,27 @@ public class ReviewService {
     private BookRepository bookRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberBookRepository memberBookRepository;
 
 
-    public void createReview(CreateReviewDto requestDto, Long memberId) {
-        Book book = bookRepository.findById(requestDto.getBookId())
-                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다."));
-
+    public Map<String, Long> createReview(Long memberBookId, CreateReviewDto requestDto, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
 
+        MemberBook memberBook = memberBookRepository.findById(memberBookId).orElseThrow( () -> new IllegalArgumentException("책을 찾을 수 없습니다.") );
         Review review = new Review(
-                book,
+                memberBook.getBook(),
                 requestDto.getRating(),
                 requestDto.getComment(),
-                member
+                memberBook.getMember()
         );
+        memberBook.setReview(review);
+        memberBookRepository.save(memberBook);
 
-        reviewRepository.save(review);
+        Map<String, Long> response = new HashMap<>();
+        response.put("reviewId", review.getId());
+        return response;
     }
 //    public ReviewListResponseDto getReviews(Long bookId) {
 //        bookService.findBookOrThrow(bookId);

@@ -3,6 +3,7 @@ package com.example.bookrating.controller;
 import com.example.bookrating.dto.*;
 import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.service.MemberBookService;
+import com.example.bookrating.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class MemberBookController {
 
     private final MemberBookService memberBookService;
+    private final ReviewService reviewService;
 
     @GetMapping
     public List<GetMyBooksDto> getMyBooks(@AuthenticationPrincipal UserDetails userDetails) {
@@ -31,6 +33,23 @@ public class MemberBookController {
     @GetMapping("/{id}")
     public GetMyBookDto getMyBook(@PathVariable("id") Long myBookId) {
         return memberBookService.find(myBookId);
+    }
+
+    @GetMapping("/{id}/review")
+    public ReviewDto getReview(@PathVariable("id") Long myBookId) {
+        return memberBookService.findReview(myBookId);
+    }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Map<String, Boolean>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
+                                                         @AuthenticationPrincipal UserDetails userDetails) {
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        boolean exists = memberBookService.exists(isbn, memberId);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -46,16 +65,10 @@ public class MemberBookController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/exists")
-    public ResponseEntity<Map<String, Boolean>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
-                                                         @AuthenticationPrincipal UserDetails userDetails) {
+    @PostMapping("/{id}/review")
+    public Map<String, Long> addReview(@PathVariable("id") Long id, @RequestBody CreateReviewDto dto, @AuthenticationPrincipal UserDetails userDetails) {
         Long memberId = Long.parseLong(userDetails.getUsername());
-        boolean exists = memberBookService.exists(isbn, memberId);
-
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("exists", exists);
-
-        return ResponseEntity.ok(response);
+        return reviewService.createReview(id, dto, memberId);
     }
 
     @PatchMapping("/{id}/memo")
