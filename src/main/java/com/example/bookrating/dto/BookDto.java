@@ -20,6 +20,7 @@ public class BookDto {
     private OffsetDateTime datetime;
     private String authors;
     private String publisher;
+    private String url;
     private Double averageRating;
     private Long reviewCount;
 

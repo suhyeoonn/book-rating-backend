@@ -32,6 +32,7 @@ public class GetMyBookDto {
         private OffsetDateTime datetime;
         private String authors;
         private String publisher;
+        private String url;
     }
 
     @AllArgsConstructor

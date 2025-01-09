@@ -96,8 +96,9 @@ public class MemberBookService {
                 memberBook.getBook().getContents(),
                 memberBook.getBook().getDatetime(),
                 memberBook.getBook().getAuthors(),
-                memberBook.getBook().getPublisher()
-        );
+                memberBook.getBook().getPublisher(),
+                memberBook.getBook().getUrl()
+                );
 
         GetMyBookDto.ReviewDto reviewDto = memberBook.getReview() != null ?
                 new GetMyBookDto.ReviewDto(

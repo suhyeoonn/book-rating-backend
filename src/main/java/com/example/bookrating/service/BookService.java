@@ -58,6 +58,7 @@ public class BookService {
                 .datetime(book.getDatetime())
                 .authors(book.getAuthors())
                 .publisher(book.getPublisher())
+                .url(book.getUrl())
                 .averageRating(reviewSummary.getAverageRating())
                 .build();
     }
