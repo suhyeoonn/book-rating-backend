@@ -20,8 +20,8 @@ public class BookDto {
     private OffsetDateTime datetime;
     private String authors;
     private String publisher;
-    private Integer averageRating;
-    private Integer reviewCount;
+    private Double averageRating;
+    private Long reviewCount;
 
     public BookDto(Long id, String title) {
         this.id = id;

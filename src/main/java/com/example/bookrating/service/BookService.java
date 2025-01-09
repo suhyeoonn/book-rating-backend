@@ -3,8 +3,10 @@ package com.example.bookrating.service;
 import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.dto.ReviewDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
+import com.example.bookrating.dto.ReviewSummaryDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.repository.BookRepository;
+import com.example.bookrating.repository.ReviewRepository;
 import com.example.bookrating.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +20,28 @@ public class BookService {
     private BookRepository bookRepository;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private ReviewService reviewService;
 
     public List<BookDto> getBooks() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
-                .map(book -> BookDto.builder()
-                        .id(book.getId())
-                        .isbn(book.getIsbn())
-                        .title(book.getTitle())
-                        .thumbnail(book.getThumbnail())
-                        .contents(book.getContents())
-                        .datetime(book.getDatetime())
-                        .authors(book.getAuthors())
-                        .publisher(book.getPublisher())
-                        .build())
-                .collect(Collectors.toList());
+                .map(book -> {
+                    ReviewSummaryDto reviewSummary = reviewService.getReviewSummary(book.getId());
+
+                    return BookDto.builder()
+                            .id(book.getId())
+                            .isbn(book.getIsbn())
+                            .title(book.getTitle())
+                            .thumbnail(book.getThumbnail())
+                            .contents(book.getContents())
+                            .datetime(book.getDatetime())
+                            .authors(book.getAuthors())
+                            .publisher(book.getPublisher())
+                            .averageRating(reviewSummary.getAverageRating())
+                            .reviewCount(reviewSummary.getReviewCount())
+                            .build();
+                }).collect(Collectors.toList());
     }
 
     public BookDto getBookById(Long id) {
@@ -54,18 +63,24 @@ public class BookService {
     public List<BookDto> getBooksByTitle(String title) {
         List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
+
         return books.stream()
-                .map(book -> BookDto.builder()
-                        .id(book.getId())
-                        .isbn(book.getIsbn())
-                        .title(book.getTitle())
-                        .thumbnail(book.getThumbnail())
-                        .contents(book.getContents())
-                        .datetime(book.getDatetime())
-                        .authors(book.getAuthors())
-                        .publisher(book.getPublisher())
-                        .build())
-                .collect(Collectors.toList());
+                .map(book -> {
+                    ReviewSummaryDto reviewSummary = reviewService.getReviewSummary(book.getId());
+
+                    return BookDto.builder()
+                            .id(book.getId())
+                            .isbn(book.getIsbn())
+                            .title(book.getTitle())
+                            .thumbnail(book.getThumbnail())
+                            .contents(book.getContents())
+                            .datetime(book.getDatetime())
+                            .authors(book.getAuthors())
+                            .publisher(book.getPublisher())
+                            .averageRating(reviewSummary.getAverageRating())
+                            .reviewCount(reviewSummary.getReviewCount())
+                            .build();
+                }).collect(Collectors.toList());
     }
 
     public ReviewListResponseDto getReviews(Long id) {

@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +31,7 @@ public class ReviewService {
 
 
     public Map<String, Long> createReview(Long memberBookId, CreateReviewDto requestDto, Long memberId) {
-        MemberBook memberBook = memberBookRepository.findById(memberBookId).orElseThrow( () -> new IllegalArgumentException("책을 찾을 수 없습니다.") );
+        MemberBook memberBook = memberBookRepository.findById(memberBookId).orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다."));
         Review review = new Review(
                 memberBook.getBook(),
                 requestDto.getRating(),
@@ -45,19 +47,20 @@ public class ReviewService {
     }
 
     public void updateRating(Long reviewId, UpdateRatingDto dto) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
         review.patch(new Review(dto.getRating(), null));
 
         reviewRepository.save(review);
     }
 
     public void updateComment(Long reviewId, UpdateCommentDto dto) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
         review.patch(new Review(null, dto.getComment()));
 
         reviewRepository.save(review);
     }
-//    public ReviewListResponseDto getReviews(Long bookId) {
+
+    //    public ReviewListResponseDto getReviews(Long bookId) {
 //        bookService.findBookOrThrow(bookId);
 //        List<ReviewDto> reviewDtos = reviewRepository.findReviewByBookId(bookId).stream()
 //                .map(ReviewService::getReviewDto)
@@ -67,12 +70,18 @@ public class ReviewService {
 //        return new ReviewListResponseDto(reviewDtos, averageRating);
 //    }
 //
-//    private double getAverageRating(Long bookId) {
-//        Double averageRating = reviewRepository.findAverageRatingByBookId(bookId).orElse(0.0);
-//        return BigDecimal.valueOf(averageRating)
-//                .setScale(2, RoundingMode.HALF_UP)
-//                .doubleValue();
-//    }
+    public ReviewSummaryDto getReviewSummary(Long bookId) {
+        ReviewSummaryDto summary = reviewRepository.findReviewSummaryByBookId(bookId)
+                .orElse(new ReviewSummaryDto(0.0, 0L)); // ✅ 기본값 설정
+
+        // 소수점 둘째자리까지 반올림 처리
+        double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating())
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
+        summary.setAverageRating(roundedAverageRating);
+        return summary;
+    }
 //
 //    private static ReviewDto getReviewDto(Review review) {
 //        return new ReviewDto(review.getId(), review.getRating(), review.getReviewText(), review.getUpdatedAt());

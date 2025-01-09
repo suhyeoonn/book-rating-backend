@@ -13,11 +13,6 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-//    @GetMapping("/{bookId}/reviews")
-//    public ReviewListResponseDto getReviews(@PathVariable("bookId") Long bookId) {
-//        return reviewService.getReviews(bookId);
-//    }
-
     @PatchMapping("/{reviewId}/rating")
     public ResponseEntity<?> updateRating(@PathVariable("reviewId") Long reviewId, @RequestBody UpdateRatingDto dto) {
         reviewService.updateRating(reviewId, dto);
