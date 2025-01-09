@@ -51,10 +51,10 @@
 - `DELETE` : 특정 리뷰를 삭제합니다. (🔒 인증 필요)
 
 ## 📊 ERD
-<img width="623" alt="image" src="https://github.com/user-attachments/assets/a92d3ac6-4d4b-4488-bb3a-e1080579d3cc" />
+<img width="497" alt="image" src="https://github.com/user-attachments/assets/5befb130-1a36-47f9-9c76-6c06a979de84" />
 
-- Member: 사용자의 기본 정보를 저장합니다.
-- Book: 등록된 책 정보를 저장합니다.
+- Member: 사용자의 정보를 관리합니다.
+- Book: 책의 제목, 출판사 등 기본 정보를 관리합니다.
 - MemberBook: 사용자의 독서 기록을 관리합니다.
 - Review: 사용자가 책에 남긴 한줄평과 별점 정보를 관리합니다.
 
