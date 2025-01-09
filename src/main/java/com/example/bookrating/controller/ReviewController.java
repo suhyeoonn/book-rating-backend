@@ -1,15 +1,10 @@
 package com.example.bookrating.controller;
 
-import com.example.bookrating.dto.CreateReviewDto;
-import com.example.bookrating.dto.ReviewDto;
-import com.example.bookrating.dto.ReviewListResponseDto;
-import com.example.bookrating.dto.ReviewResponseDto;
+import com.example.bookrating.dto.*;
 import com.example.bookrating.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,16 +17,16 @@ public class ReviewController {
 //    public ReviewListResponseDto getReviews(@PathVariable("bookId") Long bookId) {
 //        return reviewService.getReviews(bookId);
 //    }
-//
 
-//
-//    @PatchMapping("/{bookId}/reviews/{reviewId}")
-//    public ReviewResponseDto updateReview(@PathVariable("bookId") Long bookId, @PathVariable("reviewId") Long reviewId, @RequestBody ReviewDto dto) {
-//        return reviewService.updateReview(bookId, reviewId, dto);
-//    }
-//
-//    @DeleteMapping("/{bookId}/reviews/{reviewId}")
-//    public ReviewResponseDto deleteReview(@PathVariable("bookId") Long bookId, @PathVariable("reviewId") Long reviewId) {
-//        return reviewService.deleteReview(bookId, reviewId);
-//    }
+    @PatchMapping("/{reviewId}/rating")
+    public ResponseEntity<?> updateRating(@PathVariable("reviewId") Long reviewId, @RequestBody UpdateRatingDto dto) {
+        reviewService.updateRating(reviewId, dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PatchMapping("/{reviewId}/comment")
+    public ResponseEntity<?> updateComment(@PathVariable("reviewId") Long reviewId, @RequestBody UpdateCommentDto dto) {
+        reviewService.updateComment(reviewId, dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

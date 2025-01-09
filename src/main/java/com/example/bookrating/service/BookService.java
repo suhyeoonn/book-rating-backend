@@ -1,6 +1,8 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.BookDto;
+import com.example.bookrating.dto.ReviewDto;
+import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.TagRepository;
@@ -64,6 +66,22 @@ public class BookService {
                         .publisher(book.getPublisher())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public ReviewListResponseDto getReviews(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
+
+        List<ReviewListResponseDto.Review> reviews = book.getReviews().stream().map(review -> ReviewListResponseDto.Review.builder()
+                        .id(review.getId())
+                        .rating(review.getRating())
+                        .comment(review.getComment())
+                        .updatedAt(review.getUpdatedAt())
+                        .user(new ReviewListResponseDto.User(review.getMember().getId(), review.getMember().getUsername()))
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ReviewListResponseDto(reviews, 0);
     }
 
 }

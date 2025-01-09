@@ -32,11 +32,16 @@ public class Review {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    public Review(Book book, Integer rating, String reviewText, Member member) {
+    public Review(Book book, Integer rating, String comment, Member member) {
         this.book = book;
         this.rating = rating;
-        this.comment = reviewText;
+        this.comment = comment;
         this.member = member;
+    }
+
+    public Review(Integer rating, String comment) {
+        this.rating = rating;
+        this.comment = comment;
     }
 
     @PrePersist

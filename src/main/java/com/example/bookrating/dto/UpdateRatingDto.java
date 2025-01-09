@@ -1,18 +1,14 @@
 package com.example.bookrating.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ReviewDto {
-    private Long id;
+@Setter
+public class UpdateRatingDto {
     private Integer rating;
-    private String comment;
-    private LocalDateTime updatedAt;
 }
