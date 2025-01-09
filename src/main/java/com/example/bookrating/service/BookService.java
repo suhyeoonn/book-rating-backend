@@ -6,7 +6,6 @@ import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.dto.ReviewSummaryDto;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.repository.BookRepository;
-import com.example.bookrating.repository.ReviewRepository;
 import com.example.bookrating.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +47,8 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
 
+        ReviewSummaryDto reviewSummary = reviewService.getReviewSummary(book.getId());
+
         return BookDto.builder()
                 .id(book.getId())
                 .isbn(book.getIsbn())
@@ -57,6 +58,7 @@ public class BookService {
                 .datetime(book.getDatetime())
                 .authors(book.getAuthors())
                 .publisher(book.getPublisher())
+                .averageRating(reviewSummary.getAverageRating())
                 .build();
     }
 
@@ -86,6 +88,7 @@ public class BookService {
     public ReviewListResponseDto getReviews(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
+
 
         List<ReviewListResponseDto.Review> reviews = book.getReviews().stream().map(review -> ReviewListResponseDto.Review.builder()
                         .id(review.getId())

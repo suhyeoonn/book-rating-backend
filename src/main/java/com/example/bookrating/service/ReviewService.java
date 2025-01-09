@@ -1,11 +1,8 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.*;
-import com.example.bookrating.entity.Book;
-import com.example.bookrating.entity.Member;
 import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.entity.Review;
-import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.MemberBookRepository;
 import com.example.bookrating.repository.MemberRepository;
 import com.example.bookrating.repository.ReviewRepository;
@@ -18,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -60,19 +56,9 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    //    public ReviewListResponseDto getReviews(Long bookId) {
-//        bookService.findBookOrThrow(bookId);
-//        List<ReviewDto> reviewDtos = reviewRepository.findReviewByBookId(bookId).stream()
-//                .map(ReviewService::getReviewDto)
-//                .collect(Collectors.toList());
-//
-//        double averageRating = getAverageRating(bookId);
-//        return new ReviewListResponseDto(reviewDtos, averageRating);
-//    }
-//
     public ReviewSummaryDto getReviewSummary(Long bookId) {
         ReviewSummaryDto summary = reviewRepository.findReviewSummaryByBookId(bookId)
-                .orElse(new ReviewSummaryDto(0.0, 0L)); // ✅ 기본값 설정
+                .orElse(new ReviewSummaryDto(0.0, 0L)); // 기본값 설정
 
         // 소수점 둘째자리까지 반올림 처리
         double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating())
@@ -82,32 +68,4 @@ public class ReviewService {
         summary.setAverageRating(roundedAverageRating);
         return summary;
     }
-//
-//    private static ReviewDto getReviewDto(Review review) {
-//        return new ReviewDto(review.getId(), review.getRating(), review.getReviewText(), review.getUpdatedAt());
-//    }
-//
-
-//
-//    public ReviewResponseDto updateReview(Long bookId, Long reviewId, ReviewDto dto) {
-//        Book book = bookService.findBookOrThrow(bookId);
-//
-//        Review review = findReviewOrThrow(reviewId);
-//
-//        review.patch(new Review(book, dto.getRating(), dto.getReviewText()));
-//
-//        Review saved = reviewRepository.save(review);
-//        return new ReviewResponseDto(getReviewDto(saved), getAverageRating(bookId));
-//    }
-//
-//    private Review findReviewOrThrow(Long reviewId) {
-//        return reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalStateException("존재하지 않는 리뷰입니다"));
-//    }
-//
-//    public ReviewResponseDto deleteReview(Long bookId, Long reviewId) {
-//        bookService.findBookOrThrow(bookId);
-//        findReviewOrThrow(reviewId);
-//        reviewRepository.deleteById(reviewId);
-//        return new ReviewResponseDto(null, getAverageRating(bookId));
-//    }
 }
