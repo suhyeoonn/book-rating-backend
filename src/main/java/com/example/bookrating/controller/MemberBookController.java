@@ -56,13 +56,12 @@ public class MemberBookController {
      * 책 등록 API
      */
     @PostMapping
-    public ResponseEntity<?> createBook(
+    public Map<String, Long> createBook(
             @Valid @RequestBody CreateMemberBookDto createMemberBookDto,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         Long memberId = Long.parseLong(userDetails.getUsername());
-        memberBookService.create(createMemberBookDto, memberId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return memberBookService.create(createMemberBookDto, memberId);
     }
 
     @PostMapping("/{id}/review")

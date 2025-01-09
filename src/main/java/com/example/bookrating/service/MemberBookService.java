@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,7 @@ public class MemberBookService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public MemberBook create(CreateMemberBookDto createMemberBookDto, Long memberId) {
+    public Map<String, Long> create(CreateMemberBookDto createMemberBookDto, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
 
@@ -47,7 +49,12 @@ public class MemberBookService {
                 .book(book)
                 .status(0)
                 .build();
-        return memberBookRepository.save(memberBook);
+
+        memberBookRepository.save(memberBook);
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("id", memberBook.getId());
+        return response;
     }
 
     public List<GetMyBooksDto> findAll(Long memberId) {

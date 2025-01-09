@@ -20,7 +20,6 @@ public class CreateMemberBookDto {
     @NotBlank
     private String thumbnail;
 
-    @NotBlank
     private String contents;
 
     @PastOrPresent
@@ -29,7 +28,6 @@ public class CreateMemberBookDto {
     @NotBlank
     private String authors;
 
-    @NotBlank
     private String publisher;
 
     @NotBlank
