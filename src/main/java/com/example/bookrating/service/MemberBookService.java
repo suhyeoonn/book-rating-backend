@@ -57,8 +57,22 @@ public class MemberBookService {
 
         memberBookRepository.save(memberBook);
 
-        // Redis에 저장
-        redisTemplate.opsForValue().set(BOOK_CACHE_PREFIX + memberBook.getId(), memberBook);
+        Object cachedObject = redisTemplate.opsForValue().get(BOOK_CACHE_PREFIX + book.getId());
+        if (cachedObject == null) {
+            // Redis에 저장
+            BookDto bookDto = BookDto.builder()
+                    .id(book.getId())
+                    .isbn(book.getIsbn())
+                    .title(book.getTitle())
+                    .thumbnail(book.getThumbnail())
+                    .contents(book.getContents())
+                    .datetime(book.getDatetime())
+                    .authors(book.getAuthors())
+                    .publisher(book.getPublisher())
+                    .url(book.getUrl())
+                    .build();
+            redisTemplate.opsForValue().set(BOOK_CACHE_PREFIX + book.getId(), bookDto);
+        }
 
         Map<String, Long> response = new HashMap<>();
         response.put("id", memberBook.getId());
