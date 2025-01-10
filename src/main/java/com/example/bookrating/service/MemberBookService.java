@@ -12,6 +12,7 @@ import com.example.bookrating.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,6 +30,10 @@ public class MemberBookService {
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public static final String BOOK_CACHE_PREFIX = "book:";
 
     @Transactional
     public Map<String, Long> create(CreateMemberBookDto createMemberBookDto, Long memberId) {
@@ -51,6 +56,9 @@ public class MemberBookService {
                 .build();
 
         memberBookRepository.save(memberBook);
+
+        // Redis에 저장
+        redisTemplate.opsForValue().set(BOOK_CACHE_PREFIX + memberBook.getId(), memberBook);
 
         Map<String, Long> response = new HashMap<>();
         response.put("id", memberBook.getId());

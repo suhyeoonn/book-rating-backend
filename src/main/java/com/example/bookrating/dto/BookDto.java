@@ -1,17 +1,17 @@
 package com.example.bookrating.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-public class BookDto {
+@Setter
+public class BookDto implements Serializable {
     private Long id;
     private String isbn;
     private String title;
