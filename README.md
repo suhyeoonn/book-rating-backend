@@ -1,19 +1,35 @@
 # 📚 BookRating API
 
-사용자가 책을 등록하고, 각 책에 대해 별점을 매기고 리뷰를 남길 수 있는 REST API를 제공합니다
+사용자가 책을 등록하고, 각 책에 대해 별점을 매기고 리뷰를 남길 수 있는 RESTful API를 제공합니다
 
 ## 🚀 주요 기능
 
-1. **책 등록**: 사용자가 새로운 책을 애플리케이션에 등록할 수 있습니다.
-2. **별점 및 리뷰 작성**: 등록된 책에 대해 사용자가 별점을 매기고, 리뷰를 작성할 수 있습니다.
-3. **리뷰 및 별점 조회**: 여러 사용자가 등록한 책에 대한 별점과 리뷰를 종합적으로 확인할 수 있습니다.
+1. **독서 리스트 관리**: 사용자가 자신의 리스트에 책을 추가하고, 책의 읽기 상태(읽기 전, 읽는 중, 중단 등)를 관리할 수 있습니다.
+2. **독서 노트 작성**: 리스트에 추가한 책에 대해 나만의 메모를 작성할 수 있으며, 해당 메모는 본인만 접근 가능합니다.
+3. **별점 및 한줄평 공유**: 사용자가 책에 별점을 부여하고, 한줄평을 작성하여 다른 사용자들과 책 후기를 공유할 수 있습니다.
+
+## 📦 시스템 구조도
+![image](https://github.com/user-attachments/assets/7ec2c1ff-d826-45b8-9f3e-232d3c46d599)
+
+이 프로젝트는 Spring Boot 백엔드 애플리케이션, MySQL 데이터베이스, Redis 캐시 데이터베이스를 Docker 컨테이너로 구성하고, <br/>
+GitHub Actions를 활용하여 AWS EC2에 자동으로 배포를 수행합니다.
 
 ## 🛠 기술 스택
 
 - **JDK**: Version 17
 - **프레임워크**: Spring Boot 3.3.2
-- **데이터베이스**: MySQL
-- **배포**: AWS EC2
+- **데이터베이스**: MySQL, Redis
+- **빌드 도구**: Gradle
+- **배포**: AWS EC2, Docker
+- **CI/CD**: GitHub Actions
+
+## 📊 ERD
+<img width="497" alt="image" src="https://github.com/user-attachments/assets/5befb130-1a36-47f9-9c76-6c06a979de84" />
+
+- Member: 사용자의 정보를 관리합니다.
+- Book: 책의 제목, 출판사 등 기본 정보를 관리합니다.
+- MemberBook: 사용자의 독서 기록을 관리합니다.
+- Review: 사용자가 책에 남긴 한줄평과 별점 정보를 관리합니다.
 
 ## 📄 API 명세
 
@@ -49,17 +65,3 @@
 >
 - `PATCH` : 특정 리뷰를 수정합니다. (🔒 인증 필요)
 - `DELETE` : 특정 리뷰를 삭제합니다. (🔒 인증 필요)
-
-## 📊 ERD
-<img width="497" alt="image" src="https://github.com/user-attachments/assets/5befb130-1a36-47f9-9c76-6c06a979de84" />
-
-- Member: 사용자의 정보를 관리합니다.
-- Book: 책의 제목, 출판사 등 기본 정보를 관리합니다.
-- MemberBook: 사용자의 독서 기록을 관리합니다.
-- Review: 사용자가 책에 남긴 한줄평과 별점 정보를 관리합니다.
-
-## 📦 배포 흐름도
-
-이 프로젝트는 Docker를 사용하여 배포되며, 이미지를 빌드한 후 서버 인스턴스에서 이미지를 받아 실행합니다.
-
-![IMG_97B5B59A4FED-1](https://github.com/user-attachments/assets/c139fb0c-75c4-4031-a54e-83d01bc9f368)
