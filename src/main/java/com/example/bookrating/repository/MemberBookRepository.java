@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
     boolean existsByMemberAndBook(Member member, Book book);
-    List<MemberBook> findByMemberId(Long memberId);
+    List<MemberBook> findByMemberIdOrderByStatusAsc(Long memberId);
     boolean existsByMemberIdAndBookId(Long memberId, Long bookId);
 }

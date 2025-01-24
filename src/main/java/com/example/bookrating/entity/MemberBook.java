@@ -34,7 +34,7 @@ public class MemberBook {
     private Review review;
 
     @Column(columnDefinition = "TINYINT", nullable = false)
-    private int status = 0;
+    private ReadingStatus status = ReadingStatus.READY;
 
     @Column(columnDefinition = "TEXT")
     private String memo;

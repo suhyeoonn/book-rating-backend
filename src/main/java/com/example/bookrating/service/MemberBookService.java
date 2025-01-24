@@ -1,10 +1,7 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.*;
-import com.example.bookrating.entity.Book;
-import com.example.bookrating.entity.Member;
-import com.example.bookrating.entity.MemberBook;
-import com.example.bookrating.entity.Review;
+import com.example.bookrating.entity.*;
 import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.MemberBookRepository;
 import com.example.bookrating.repository.MemberRepository;
@@ -52,7 +49,7 @@ public class MemberBookService {
         MemberBook memberBook = MemberBook.builder()
                 .member(member)
                 .book(book)
-                .status(0)
+                .status(ReadingStatus.READY)
                 .build();
 
         memberBookRepository.save(memberBook);
@@ -83,12 +80,12 @@ public class MemberBookService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
 
-        List<MemberBook> memberBooks = memberBookRepository.findByMemberId(memberId);
+        List<MemberBook> memberBooks = memberBookRepository.findByMemberIdOrderByStatusAsc(memberId);
 
         return memberBooks.stream()
                 .map(memberBook -> new GetMyBooksDto(
                         memberBook.getId(),
-                        memberBook.getStatus(),
+                        memberBook.getStatus().getCode(),
                         memberBook.getCreatedAt(),
                         memberBook.getUpdatedAt(),
                         memberBook.getFinishedAt(),
@@ -130,7 +127,7 @@ public class MemberBookService {
 
         return new GetMyBookDto(
                 memberBook.getId(),
-                memberBook.getStatus(),
+                memberBook.getStatus().getCode(),
                 memberBook.getCreatedAt(),
                 memberBook.getUpdatedAt(),
                 memberBook.getFinishedAt(),
@@ -154,7 +151,7 @@ public class MemberBookService {
         MemberBook memberBook = memberBookRepository.findById(memberBookId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
-        memberBook.setStatus(status);
+        memberBook.setStatus(ReadingStatus.fromCode(status));
         return memberBookRepository.save(memberBook);
     }
 
