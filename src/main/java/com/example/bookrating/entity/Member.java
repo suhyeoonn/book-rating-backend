@@ -28,4 +28,21 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Review> reviews;
+
+    @Column
+    private String provider;
+
+    @Column
+    private String providerId;
+
+    @Column
+    private String email;
+
+    public Member(String username, String password, String provider, String providerId, String email) {
+        this.username = username;
+        this.password = password;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.email = email;
+    }
 }

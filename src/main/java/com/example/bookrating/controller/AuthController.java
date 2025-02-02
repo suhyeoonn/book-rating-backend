@@ -45,6 +45,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberDto memberDto, HttpSession session) {
+        // SecurityContextHolder (Spring Security의 세션)
+        // └─ SecurityContext (인증 정보 저장소)
+        //     └─ Authentication (인증된 사용자 정보)
+        //         ├─ Principal (UserDetails 객체)
+        //         ├─ Credentials (비밀번호)
+        //         ├─ Authorities (권한 정보)
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPassword())

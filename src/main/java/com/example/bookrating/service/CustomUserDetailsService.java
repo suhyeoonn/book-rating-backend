@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// login 주소가 호출되면 시큐리티가 loadUserByUsername 자동 호출
+// 시큐리티 session(내부 Authentication(내부 UserDetails)
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

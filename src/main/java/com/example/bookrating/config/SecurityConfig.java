@@ -2,6 +2,7 @@ package com.example.bookrating.config;
 
 import com.example.bookrating.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+    @Autowired
+    private PrincipalOAuth2UserService principalOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final CustomUserDetailsService userDetailsService;
 
     // BCryptPasswordEncoder를 빈으로 등록
@@ -22,7 +25,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 세션 기반 설정 + CSRF 비활성화 + 인증 경로 수정
+    // CSRF(Cross-Site Request Forgery)는 사용자가 의도하지 않은 요청을 보내도록 속이는 기법
+    // 공격자는 피해자의 인증된 세션을 악용해 원치 않는 요청을 수행하게 만듦
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -34,7 +38,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .maximumSessions(1)
                         .expiredUrl("/auth/login"))
-                .httpBasic(basic -> basic.disable());
+                .httpBasic(basic -> basic.disable())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(principalOAuth2UserService) // 커스텀 OAuth2UserService 적용
+                        )
+                        .successHandler(oAuth2LoginSuccessHandler)
+                );
 
         return http.build();
     }
