@@ -2,6 +2,7 @@ package com.example.bookrating.config;
 
 import com.example.bookrating.config.provider.GoogleUserInfo;
 import com.example.bookrating.config.provider.OAuth2UserInfo;
+import com.example.bookrating.config.provider.OAuth2UserInfoFactory;
 import com.example.bookrating.entity.Member;
 import com.example.bookrating.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
-//    @Autowired
+    //    @Autowired
 //    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private MemberRepository memberRepository;
@@ -27,27 +28,24 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        OAuth2UserInfo oAuth2UserInfo = null;
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(provider, oAuth2User);
 
-        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
-            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }
-        String provider = oAuth2UserInfo.getProvider();
         String providerId = oAuth2UserInfo.getProviderId();
-        String username = provider+'_'+providerId;
+        String username = provider + '_' + providerId;
         String email = oAuth2UserInfo.getEmail();
         String password = "oauth"; //bCryptPasswordEncoder.encode("oauth");
 
         Member member = memberRepository.findByUsername(username).orElse(null);
 
         if (member == null) {
-             member = Member.builder()
-                     .username(username)
-                     .password(password)
-                     .provider(provider)
-                     .providerId(providerId)
-                     .email(email)
-                     .build();
+            member = Member.builder()
+                    .username(username)
+                    .password(password)
+                    .provider(provider)
+                    .providerId(providerId)
+                    .email(email)
+                    .build();
 
             memberRepository.save(member);
         }
