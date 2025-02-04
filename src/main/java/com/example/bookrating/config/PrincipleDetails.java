@@ -51,4 +51,8 @@ public class PrincipleDetails implements UserDetails, OAuth2User {
     public String getUsername() {
         return member.getUsername();
     }
+
+    public Long getId() {
+        return member.getId();
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.bookrating.service;
 
+import com.example.bookrating.config.PrincipleDetails;
+import com.example.bookrating.entity.Member;
 import com.example.bookrating.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByUsername(username)
-                .map(member -> {
-                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-                    return new User(member.getId().toString(), member.getPassword(), authorities);
-                })
+        Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new PrincipleDetails(member);
     }
 
 }

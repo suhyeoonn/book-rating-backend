@@ -19,8 +19,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
-    //    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private MemberRepository memberRepository;
 

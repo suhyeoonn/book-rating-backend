@@ -1,5 +1,6 @@
 package com.example.bookrating.controller;
 
+import com.example.bookrating.config.PrincipleDetails;
 import com.example.bookrating.dto.*;
 import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.service.MemberBookService;
@@ -25,8 +26,8 @@ public class MemberBookController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public List<GetMyBooksDto> getMyBooks(@AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
+    public List<GetMyBooksDto> getMyBooks(@AuthenticationPrincipal PrincipleDetails principalDetails) {
+        Long memberId = principalDetails.getId();
         return memberBookService.findAll(memberId);
     }
 
@@ -58,9 +59,9 @@ public class MemberBookController {
     @PostMapping
     public Map<String, Long> createBook(
             @Valid @RequestBody CreateMemberBookDto createMemberBookDto,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal PrincipleDetails principalDetails) {
 
-        Long memberId = Long.parseLong(userDetails.getUsername());
+        Long memberId = principalDetails.getId();
         return memberBookService.create(createMemberBookDto, memberId);
     }
 

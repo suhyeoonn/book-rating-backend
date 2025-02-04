@@ -1,7 +1,9 @@
 package com.example.bookrating.controller;
 
 
+import com.example.bookrating.config.PrincipleDetails;
 import com.example.bookrating.dto.LoginResponseDto;
+import com.example.bookrating.dto.MeDto;
 import com.example.bookrating.dto.MemberDto;
 import com.example.bookrating.service.AuthService;
 import com.example.bookrating.service.CustomUserDetailsService;
@@ -13,15 +15,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -76,5 +76,22 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/me")
+//    public ResponseEntity<MemberDto> getCurrentUser(@AuthenticationPrincipal PrincipleDetails principalDetails) {
+    public ResponseEntity<MeDto> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build(); // 인증되지 않은 경우 401 응답
+        }
+
+        PrincipleDetails principalDetails = (PrincipleDetails) authentication.getPrincipal();
+
+        MeDto userDto = new MeDto(
+                new MeDto.User(null, principalDetails.getUsername()),
+                ""
+        );
+
+        return ResponseEntity.ok(userDto);
     }
 }
