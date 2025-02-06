@@ -1,20 +1,15 @@
 package com.example.bookrating.config;
 
-import com.example.bookrating.config.provider.GoogleUserInfo;
 import com.example.bookrating.config.provider.OAuth2UserInfo;
 import com.example.bookrating.config.provider.OAuth2UserInfoFactory;
 import com.example.bookrating.entity.Member;
 import com.example.bookrating.repository.MemberRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
@@ -30,9 +25,9 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(provider, oAuth2User);
 
         String providerId = oAuth2UserInfo.getProviderId();
-        String username = provider + '_' + providerId;
+        String username = oAuth2UserInfo.getUsername();
         String email = oAuth2UserInfo.getEmail();
-        String password = "oauth"; //bCryptPasswordEncoder.encode("oauth");
+        String password = "oauth"; // TODO: password 제거
 
         Member member = memberRepository.findByUsername(username).orElse(null);
 
