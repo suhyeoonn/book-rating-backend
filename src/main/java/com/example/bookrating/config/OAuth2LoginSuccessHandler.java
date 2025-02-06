@@ -35,6 +35,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String token = jwtUtil.generateToken(userId, username);
 
         // 프론트엔드로 리디렉트 (토큰 포함)
+        System.out.println("front============="+frontendUrl); // 배포확인용
         response.sendRedirect(frontendUrl+"/auth/success?token=" + token);
     }
 }
