@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    @Value("${FRONTEND_URL}")
+    private String frontendUrl;
 
     public OAuth2LoginSuccessHandler(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -32,6 +35,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String token = jwtUtil.generateToken(userId, username);
 
         // 프론트엔드로 리디렉트 (토큰 포함)
-        response.sendRedirect("http://localhost:3000/auth/success?token=" + token);
+        response.sendRedirect(frontendUrl+"/auth/success?token=" + token);
     }
 }
