@@ -56,7 +56,7 @@ jobs:
 
             echo "Pulling new Docker image..."
             sudo docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-            sudo docker pull ghcr.io/${{ github.repository }}:latest
+            sudo docker pull ghcr.io/${{ github.repository }}:latest && echo "Docker image pulled successfully."
 
             echo "Running new Docker container..."
             sudo docker run -d --name spring-boot-container \
