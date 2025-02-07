@@ -17,6 +17,8 @@ public class CorsConfig {
         config.setAllowCredentials(true); // 서버가 응답할 때 json을 자바스크립트에 처리할 수 있게 함
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
+                "https://localhost:3000",
+                "https://www.book-rating.site",
                 "https://book-rating-frontend.vercel.app"
         ));
         config.addAllowedHeader("*");
