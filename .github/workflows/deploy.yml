@@ -49,17 +49,9 @@ jobs:
           username: ${{ secrets.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            echo "Stopping existing container..."
-            # 기존 컨테이너가 없거나 중지 상태일 경우에도 무시하고 다음 명령어 실행
-            sudo docker stop spring-boot-container || true
-            sudo docker rm spring-boot-container || true
-
             echo "Pulling new Docker image..."
             sudo docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
             sudo docker pull ghcr.io/${{ github.repository }}:latest && echo "Docker image pulled successfully."
 
-            echo "Running new Docker container..."
-            sudo docker run -d --name spring-boot-container \
-              --env-file /home/${{ secrets.AWS_EC2_USERNAME }}/.env \
-              -p 8080:8080 \
-              ghcr.io/${{ github.repository }}:latest
+            echo "Running new Docker container..."          
+            sudo docker-compose up -d
