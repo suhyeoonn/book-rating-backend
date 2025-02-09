@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -43,8 +42,8 @@ public class MemberBookController {
 
     @GetMapping("/exists")
     public ResponseEntity<Map<String, Boolean>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
-                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
+                                                         @AuthenticationPrincipal PrincipleDetails principalDetails) {
+        Long memberId = principalDetails.getId();
         boolean exists = memberBookService.exists(isbn, memberId);
 
         Map<String, Boolean> response = new HashMap<>();
@@ -66,8 +65,8 @@ public class MemberBookController {
     }
 
     @PostMapping("/{id}/review")
-    public Map<String, Long> addReview(@PathVariable("id") Long id, @RequestBody CreateReviewDto dto, @AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
+    public Map<String, Long> addReview(@PathVariable("id") Long id, @RequestBody CreateReviewDto dto, @AuthenticationPrincipal PrincipleDetails principalDetails) {
+        Long memberId = principalDetails.getId();
         return reviewService.createReview(id, dto, memberId);
     }
 
