@@ -4,7 +4,8 @@ public enum ReadingStatus {
     READY(0),
     READING(1),
     STOPPED(2),
-    FINISHED(3);
+    FINISHED(3),
+    NONE(-1);
 
     private int code;
 

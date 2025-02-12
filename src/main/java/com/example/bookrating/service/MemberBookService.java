@@ -98,10 +98,15 @@ public class MemberBookService {
                 .collect(Collectors.toList());
     }
 
-    public boolean exists(String isbn, Long memberId) {
+    public int getBookStatus(String isbn, Long memberId) {
         Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
-        return memberBookRepository.existsByMemberIdAndBookId(memberId, book.getId());
+        MemberBook memberBook = memberBookRepository.findByMemberIdAndBookId(memberId, book.getId());
+        if (memberBook == null) {
+            return ReadingStatus.NONE.getCode();
+        }
+
+        return memberBook.getStatus().getCode();
     }
 
     public GetMyBookDto find(Long myBookId) {

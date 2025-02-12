@@ -2,12 +2,10 @@ package com.example.bookrating.controller;
 
 import com.example.bookrating.config.PrincipleDetails;
 import com.example.bookrating.dto.*;
-import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.service.MemberBookService;
 import com.example.bookrating.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -41,13 +39,14 @@ public class MemberBookController {
     }
 
     @GetMapping("/exists")
-    public ResponseEntity<Map<String, Boolean>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
+    public ResponseEntity<Map<String, Integer>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
                                                          @AuthenticationPrincipal PrincipleDetails principalDetails) {
+        // TODO: 왜 bookId가 아니라 isbn을 전달할까? /{bookId}/status
         Long memberId = principalDetails.getId();
-        boolean exists = memberBookService.exists(isbn, memberId);
+        int bookStatus = memberBookService.getBookStatus(isbn, memberId);
 
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("exists", exists);
+        Map<String, Integer> response = new HashMap<>();
+        response.put("status", bookStatus);
 
         return ResponseEntity.ok(response);
     }
