@@ -39,16 +39,13 @@ public class MemberBookController {
     }
 
     @GetMapping("/exists")
-    public ResponseEntity<Map<String, Integer>> getBooks(@RequestParam(name = "isbn", required = false) String isbn,
+    public BookStatusResponse getBooks(@RequestParam(name = "isbn", required = false) String isbn,
                                                          @AuthenticationPrincipal PrincipleDetails principalDetails) {
         // TODO: 왜 bookId가 아니라 isbn을 전달할까? /{bookId}/status
         Long memberId = principalDetails.getId();
-        int bookStatus = memberBookService.getBookStatus(isbn, memberId);
+        BookStatusResponse response = memberBookService.getBookStatus(isbn, memberId);
 
-        Map<String, Integer> response = new HashMap<>();
-        response.put("status", bookStatus);
-
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     /**
