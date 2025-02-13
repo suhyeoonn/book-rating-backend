@@ -51,8 +51,11 @@ public class BookService {
         if (cachedObject != null) {
             BookDto cachedBook = objectMapper.convertValue(cachedObject, BookDto.class);
             setReviewSummary(cachedBook);
+            System.out.println("cache hit: "+ cachedBook);
             return cachedBook;
         }
+
+        System.out.println("cache miss: " + id);
 
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
