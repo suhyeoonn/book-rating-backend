@@ -49,7 +49,7 @@ public class MemberBookService {
         MemberBook memberBook = MemberBook.builder()
                 .member(member)
                 .book(book)
-                .status(ReadingStatus.READY)
+                .status(ReadingStatus.fromCode(createMemberBookDto.getStatus()))
                 .build();
 
         memberBookRepository.save(memberBook);

@@ -47,6 +47,7 @@ public class BookService {
     }
 
     public BookDto getBookById(Long id) {
+        // opsForValue(): Redis에서 String 타입 데이터를 다룰 때 사용하는 API
         Object cachedObject = redisTemplate.opsForValue().get(BOOK_CACHE_PREFIX + id);
         if (cachedObject != null) {
             BookDto cachedBook = objectMapper.convertValue(cachedObject, BookDto.class);

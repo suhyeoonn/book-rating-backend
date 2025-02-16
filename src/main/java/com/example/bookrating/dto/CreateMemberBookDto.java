@@ -32,4 +32,6 @@ public class CreateMemberBookDto {
 
     @NotBlank
     private String url;
+
+    private int status;
 }
