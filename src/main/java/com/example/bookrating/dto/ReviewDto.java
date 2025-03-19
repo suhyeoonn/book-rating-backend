@@ -15,4 +15,5 @@ public class ReviewDto {
     private Integer rating;
     private String comment;
     private LocalDateTime updatedAt;
+    private Long[] levels;
 }

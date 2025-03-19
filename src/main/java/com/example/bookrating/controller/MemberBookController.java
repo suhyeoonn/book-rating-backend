@@ -33,14 +33,9 @@ public class MemberBookController {
         return memberBookService.find(myBookId);
     }
 
-    @GetMapping("/{id}/review")
-    public ReviewDto getReview(@PathVariable("id") Long myBookId) {
-        return memberBookService.findReview(myBookId);
-    }
-
     @GetMapping("/exists")
     public BookStatusResponse getBooks(@RequestParam(name = "isbn", required = false) String isbn,
-                                                         @AuthenticationPrincipal PrincipleDetails principalDetails) {
+                                       @AuthenticationPrincipal PrincipleDetails principalDetails) {
         // TODO: 왜 bookId가 아니라 isbn을 전달할까? /{bookId}/status
         Long memberId = principalDetails.getId();
         BookStatusResponse response = memberBookService.getBookStatus(isbn, memberId);
@@ -60,11 +55,6 @@ public class MemberBookController {
         return memberBookService.create(createMemberBookDto, memberId);
     }
 
-    @PostMapping("/{id}/review")
-    public Map<String, Long> addReview(@PathVariable("id") Long id, @RequestBody CreateReviewDto dto, @AuthenticationPrincipal PrincipleDetails principalDetails) {
-        Long memberId = principalDetails.getId();
-        return reviewService.createReview(id, dto, memberId);
-    }
 
     @PatchMapping("/{id}/memo")
     public ResponseEntity<String> updateMemo(

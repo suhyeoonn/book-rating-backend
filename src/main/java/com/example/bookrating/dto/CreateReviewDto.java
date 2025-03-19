@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -12,4 +14,5 @@ import lombok.Setter;
 public class CreateReviewDto {
     private String comment;
     private int rating;
+    private List<Long> levels;
 }

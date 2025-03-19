@@ -168,26 +168,6 @@ public class MemberBookService {
         memberBookRepository.delete(memberBook);
     }
 
-    public ReviewDto findReview(Long id) {
-        MemberBook memberBook = memberBookRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
-
-        Review review = memberBook.getReview();
-
-        // 리뷰가 없을 경우 null 반환
-        if (review == null) {
-            return null;
-        }
-
-        // 리뷰가 존재하는 경우 DTO로 변환 후 반환
-        return new ReviewDto(
-                review.getId(),
-                review.getRating(),
-                review.getComment(),
-                review.getUpdatedAt()
-        );
-    }
-
     private Book saveNewBook(CreateMemberBookDto dto) {
         Book book = Book.builder()
                 .isbn(dto.getIsbn())

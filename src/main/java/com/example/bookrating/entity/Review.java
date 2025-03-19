@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -33,12 +35,23 @@ public class Review {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    public Review(Book book, Integer rating, String comment, Member member) {
+    @ManyToMany
+    @JoinTable(
+            name = "review_levels", // 중간 테이블 이름
+            joinColumns = @JoinColumn(name = "review_id"),
+            inverseJoinColumns = @JoinColumn(name = "level_id")
+    )
+    private Set<Level> levels = new HashSet<>();
+
+    public Review(Book book, Integer rating, String comment, Member member, Set<Level> levels) {
         this.book = book;
         this.rating = rating;
         this.comment = comment;
         this.member = member;
+        this.levels = levels;
     }
+
+
 
     public Review(Integer rating, String comment) {
         this.rating = rating;
@@ -56,6 +69,9 @@ public class Review {
         }
         if (review.rating != null) {
             this.rating = review.rating;
+        }
+        if (review.levels != null) {
+            this.levels = review.levels;
         }
     }
 }
