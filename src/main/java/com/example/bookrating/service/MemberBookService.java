@@ -99,7 +99,10 @@ public class MemberBookService {
     }
 
     public BookStatusResponse getBookStatus(String isbn, Long memberId) {
-        Book book = bookRepository.findByIsbn(isbn).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+        Book book = bookRepository.findByIsbn(isbn).orElse(null);
+        if (book == null) {
+            return new BookStatusResponse(null, -1);
+        }
 
         MemberBook memberBook = memberBookRepository.findByMemberIdAndBookId(memberId, book.getId());
         if (memberBook == null) {
