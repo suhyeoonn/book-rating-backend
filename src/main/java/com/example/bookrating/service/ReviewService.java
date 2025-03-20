@@ -46,7 +46,12 @@ public class ReviewService {
                         .build())
                 .collect(Collectors.toList());
 
-        return new ReviewListResponseDto(reviewDtos, 0);
+        ReviewSummaryDto summary = reviewRepository.findReviewSummaryByIsbn(isbn).orElse(new ReviewSummaryDto(0.0, 0L)); // 기본값 설정
+
+        // 소수점 둘째자리까지 반올림 처리
+        double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        return new ReviewListResponseDto(reviewDtos, roundedAverageRating);
     }
 
     public ReviewDto findReview(Long id) {

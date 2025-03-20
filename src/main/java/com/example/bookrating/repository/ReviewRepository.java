@@ -18,4 +18,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "COALESCE(AVG(r.rating), 0), COUNT(r)) " +
             "FROM Review r WHERE r.book.id = :bookId")
     Optional<ReviewSummaryDto> findReviewSummaryByBookId(@Param("bookId") Long bookId);
+
+    @Query("SELECT new com.example.bookrating.dto.ReviewSummaryDto( " +
+            "COALESCE(AVG(r.rating), 0), COUNT(r)) " +
+            "FROM Review r WHERE r.isbn = :isbn")
+    Optional<ReviewSummaryDto> findReviewSummaryByIsbn(@Param("isbn") String isbn);
 }
