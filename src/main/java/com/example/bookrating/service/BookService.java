@@ -75,23 +75,6 @@ public class BookService {
                 .map(this::getBookDto).collect(Collectors.toList());
     }
 
-    public ReviewListResponseDto getReviews(Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book with ID " + id + " not found."));
-
-
-        List<ReviewListResponseDto.Review> reviews = book.getReviews().stream().map(review -> ReviewListResponseDto.Review.builder()
-                        .id(review.getId())
-                        .rating(review.getRating())
-                        .comment(review.getComment())
-                        .updatedAt(review.getUpdatedAt())
-                        .user(new ReviewListResponseDto.User(review.getMember().getId(), review.getMember().getUsername()))
-                        .build())
-                .collect(Collectors.toList());
-
-        return new ReviewListResponseDto(reviews, 0);
-    }
-
     private BookDto convertToBookDto(Book book) {
         return BookDto.builder()
                 .id(book.getId())

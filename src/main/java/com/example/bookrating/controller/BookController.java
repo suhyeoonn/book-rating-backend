@@ -3,6 +3,7 @@ package com.example.bookrating.controller;
 import com.example.bookrating.dto.BookDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.service.BookService;
+import com.example.bookrating.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookService bookService;
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping
     public List<BookDto> getBooks(@RequestParam(name = "title", required = false) String title) {
@@ -30,8 +33,8 @@ public class BookController {
         return bookService.getBookById(bookId);
     }
 
-    @GetMapping("{id}/reviews")
-    public ReviewListResponseDto getReviews(@PathVariable("id") Long bookId) {
-        return bookService.getReviews(bookId);
+    @GetMapping("{isbn}/reviews")
+    public ReviewListResponseDto getReviews(@PathVariable("isbn") String isbn) {
+        return reviewService.getReviews(isbn);
     }
 }

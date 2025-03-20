@@ -1,6 +1,7 @@
 package com.example.bookrating.service;
 
 import com.example.bookrating.dto.*;
+import com.example.bookrating.entity.Book;
 import com.example.bookrating.entity.Level;
 import com.example.bookrating.entity.MemberBook;
 import com.example.bookrating.entity.Review;
@@ -15,10 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +30,27 @@ public class ReviewService {
     @Autowired
     private MemberBookRepository memberBookRepository;
 
+    public ReviewListResponseDto getReviews(String isbn) {
+        List<Review> reviews = reviewRepository.findReviewByIsbn(isbn);
+
+        if (reviews.isEmpty()) {
+            return new ReviewListResponseDto(new ArrayList<>(), 0);
+        }
+
+        List<ReviewListResponseDto.Review> reviewDtos = reviews.stream()
+                .map(review -> ReviewListResponseDto.Review.builder()
+                        .id(review.getId()).rating(review.getRating())
+                        .comment(review.getComment())
+                        .updatedAt(review.getUpdatedAt())
+                        .user(new ReviewListResponseDto.User(review.getMember().getId(), review.getMember().getUsername()))
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ReviewListResponseDto(reviewDtos, 0);
+    }
+
     public ReviewDto findReview(Long id) {
-        MemberBook memberBook = memberBookRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+        MemberBook memberBook = memberBookRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
         Review review = memberBook.getReview();
 
@@ -43,35 +59,19 @@ public class ReviewService {
             return null;
         }
 
-        Long[] levelIds = review.getLevels().stream()
-                .map(Level::getId) // Level 엔티티에서 id 가져오기
+        Long[] levelIds = review.getLevels().stream().map(Level::getId) // Level 엔티티에서 id 가져오기
                 .toArray(Long[]::new);
 
         // 리뷰가 존재하는 경우 DTO로 변환 후 반환
-        return new ReviewDto(
-                review.getId(),
-                review.getRating(),
-                review.getComment(),
-                review.getUpdatedAt(),
-                levelIds
-        );
+        return new ReviewDto(review.getId(), review.getRating(), review.getComment(), review.getUpdatedAt(), levelIds);
     }
 
     public Map<String, Long> createReview(Long memberBookId, CreateReviewDto requestDto, Long memberId) {
         MemberBook memberBook = memberBookRepository.findById(memberBookId).orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다."));
 
-        Set<Level> levels = requestDto.getLevels().stream()
-                .map(levelId -> levelRepository.findById(levelId)
-                        .orElseThrow(() -> new IllegalArgumentException("잘못된 레벨 ID: " + levelId)))
-                .collect(Collectors.toSet());
+        Set<Level> levels = requestDto.getLevels().stream().map(levelId -> levelRepository.findById(levelId).orElseThrow(() -> new IllegalArgumentException("잘못된 레벨 ID: " + levelId))).collect(Collectors.toSet());
 
-        Review review = new Review(
-                memberBook.getBook(),
-                requestDto.getRating(),
-                requestDto.getComment(),
-                memberBook.getMember(),
-                levels
-        );
+        Review review = new Review(memberBook.getBook(), requestDto.getRating(), requestDto.getComment(), memberBook.getMember(), levels);
 
         memberBook.setReview(review);
         memberBookRepository.save(memberBook);
@@ -96,13 +96,10 @@ public class ReviewService {
     }
 
     public ReviewSummaryDto getReviewSummary(Long bookId) {
-        ReviewSummaryDto summary = reviewRepository.findReviewSummaryByBookId(bookId)
-                .orElse(new ReviewSummaryDto(0.0, 0L)); // 기본값 설정
+        ReviewSummaryDto summary = reviewRepository.findReviewSummaryByBookId(bookId).orElse(new ReviewSummaryDto(0.0, 0L)); // 기본값 설정
 
         // 소수점 둘째자리까지 반올림 처리
-        double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating())
-                .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue();
+        double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating()).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
         summary.setAverageRating(roundedAverageRating);
         return summary;

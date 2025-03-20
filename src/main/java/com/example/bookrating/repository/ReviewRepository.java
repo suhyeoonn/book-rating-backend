@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findReviewByBookId(Long bookId);
 
+    List<Review> findReviewByIsbn(String isbn);
+
     @Query("SELECT new com.example.bookrating.dto.ReviewSummaryDto( " +
             "COALESCE(AVG(r.rating), 0), COUNT(r)) " +
             "FROM Review r WHERE r.book.id = :bookId")
