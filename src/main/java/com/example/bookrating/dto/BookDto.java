@@ -17,7 +17,7 @@ public class BookDto implements Serializable {
     private String title;
     private String thumbnail;
     private String contents;
-    private OffsetDateTime datetime;
+    private String datetime;
     private String authors;
     private String publisher;
     private String url;

@@ -109,4 +109,14 @@ public class ReviewService {
         summary.setAverageRating(roundedAverageRating);
         return summary;
     }
+
+    public ReviewSummaryDto getReviewSummaryByIsbn(String isbn) {
+        ReviewSummaryDto summary = reviewRepository.findReviewSummaryByIsbn(isbn).orElse(new ReviewSummaryDto(0.0, 0L)); // 기본값 설정
+
+        // 소수점 둘째자리까지 반올림 처리
+        double roundedAverageRating = BigDecimal.valueOf(summary.getAverageRating()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        summary.setAverageRating(roundedAverageRating);
+        return summary;
+    }
 }

@@ -63,7 +63,7 @@ public class MemberBookService {
                     .title(book.getTitle())
                     .thumbnail(book.getThumbnail())
                     .contents(book.getContents())
-                    .datetime(book.getDatetime())
+                    .datetime(String.valueOf(book.getDatetime()))
                     .authors(book.getAuthors())
                     .publisher(book.getPublisher())
                     .url(book.getUrl())
