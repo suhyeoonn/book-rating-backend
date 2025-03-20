@@ -1,6 +1,7 @@
 package com.example.bookrating.controller;
 
 import com.example.bookrating.dto.BookDto;
+import com.example.bookrating.dto.PopularBookDto;
 import com.example.bookrating.dto.ReviewListResponseDto;
 import com.example.bookrating.service.BookService;
 import com.example.bookrating.service.ReviewService;
@@ -36,5 +37,15 @@ public class BookController {
     @GetMapping("{isbn}/reviews")
     public ReviewListResponseDto getReviews(@PathVariable("isbn") String isbn) {
         return reviewService.getReviews(isbn);
+    }
+
+    @GetMapping("/popular")
+    public List<PopularBookDto> getPopularBooks() {
+        return bookService.getPopularBooks(1);
+    }
+
+    @GetMapping("/most-added")
+    public List<PopularBookDto> getMostAddedBooks() {
+        return bookService.getMostAddedBooks();
     }
 }

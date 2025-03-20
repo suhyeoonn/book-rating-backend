@@ -1,8 +1,6 @@
 package com.example.bookrating.service;
 
-import com.example.bookrating.dto.BookDto;
-import com.example.bookrating.dto.ReviewListResponseDto;
-import com.example.bookrating.dto.ReviewSummaryDto;
+import com.example.bookrating.dto.*;
 import com.example.bookrating.entity.Book;
 import com.example.bookrating.repository.BookRepository;
 import com.example.bookrating.repository.TagRepository;
@@ -101,4 +99,11 @@ public class BookService {
         return bookDto;
     }
 
+    public List<PopularBookDto> getPopularBooks(long minReviews) {
+        return bookRepository.findPopularBooks(minReviews);
+    }
+
+    public List<PopularBookDto> getMostAddedBooks() {
+        return bookRepository.findMostAddedBooks();
+    }
 }
