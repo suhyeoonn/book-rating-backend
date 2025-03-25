@@ -47,11 +47,17 @@ public class MemberBookService {
         }
 
         // 새로운 MemberBook 엔터티 생성 및 저장
+        ReadingStatus statusCode =  ReadingStatus.fromCode(createMemberBookDto.getStatus());
         MemberBook memberBook = MemberBook.builder()
                 .member(member)
                 .book(book)
-                .status(ReadingStatus.fromCode(createMemberBookDto.getStatus()))
+                .status(statusCode)
                 .build();
+
+        // 상태가 완료일 경우 완료일 저장
+        if (statusCode == ReadingStatus.FINISHED) {
+            memberBook.setFinishedAt(OffsetDateTime.now());
+        }
 
         memberBookRepository.save(memberBook);
 
