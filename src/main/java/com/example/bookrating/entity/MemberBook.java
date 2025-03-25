@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -39,27 +39,24 @@ public class MemberBook {
     @Column(columnDefinition = "TEXT")
     private String memo;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
-    private Date createdAt = new Date();
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date updatedAt = new Date();
+    private OffsetDateTime updatedAt = OffsetDateTime.now();
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column
-    private Date finishedAt;
+    private OffsetDateTime finishedAt;
 
     // 엔터티 저장 시 업데이트 시간 자동 갱신
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
+        createdAt = OffsetDateTime.now();
+        updatedAt = OffsetDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = new Date();
+        updatedAt = OffsetDateTime.now();
     }
 }

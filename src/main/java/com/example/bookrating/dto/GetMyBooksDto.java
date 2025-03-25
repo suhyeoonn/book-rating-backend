@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -12,9 +13,9 @@ import java.util.Date;
 public class GetMyBooksDto {
     private Long id;
     private int status;
-    private Date createdAt;
-    private Date updatedAt;
-    private Date finishedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime finishedAt;
     private Book book;
     private int rating;
 

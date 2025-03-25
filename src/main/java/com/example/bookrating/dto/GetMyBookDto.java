@@ -13,9 +13,9 @@ import java.util.Date;
 public class GetMyBookDto {
     private Long id;
     private int status;
-    private Date createdAt;
-    private Date updatedAt;
-    private Date finishedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime finishedAt;
     private String memo;
     private BookDto book;
     private ReviewDto review;
